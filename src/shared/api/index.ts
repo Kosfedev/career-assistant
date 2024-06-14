@@ -1,0 +1,1 @@
+export { VacancyCommonFields } from './models';

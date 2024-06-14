@@ -6,19 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-api-types": "openapi-typescript https://api.hh.ru/openapi/specification/public --output src/shared/schemas/hh.d.ts"
   },
   "dependencies": {
+    "@tanstack/react-table": "^8.17.3",
+    "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@feature-sliced/cli": "^1.0.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "14.2.3",
+    "openapi-typescript": "^6.7.6",
+    "prettier": "^3.3.2",
+    "typescript": "^5"
   }
 }
