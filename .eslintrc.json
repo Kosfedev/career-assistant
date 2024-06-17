@@ -2,7 +2,8 @@
   "extends": [
     "next/core-web-vitals",
     "eslint-config-airbnb-typescript",
-    "eslint-config-next"
+    "eslint-config-next",
+    "plugin:@tanstack/eslint-plugin-query/recommended"
   ],
   "parserOptions": {
     "project": [
