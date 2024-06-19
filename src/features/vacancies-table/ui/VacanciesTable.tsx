@@ -1,61 +1,83 @@
-import * as React from 'react';
-
+import React, { useMemo } from 'react';
 import {
   createColumnHelper,
-  flexRender, getCoreRowModel,
+  flexRender,
+  getCoreRowModel,
+  TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
-import { VacancyCommonFields } from '../../../shared/api/models';
-import { useMemo } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
 
-const columnHelper = createColumnHelper<VacancyCommonFields>();
+import { TVacancyOverview } from '@/shared/api/models';
+import { useLSDictionaries } from '@/entities/dictionaries';
 
-const useColumns = () => {
-  // TODO: вынести ключ 'dictionaries'
-  const [dictionaries] = useLocalStorage<any>('dictionaries', null);
+const columnHelper = createColumnHelper<TVacancyOverview>();
+
+const useColumns = (): TableOptions<TVacancyOverview>['columns'] => {
+  const [dictionaries] = useLSDictionaries();
 
   return useMemo(() => [
-    // TODO: разрулить типы
-    columnHelper.accessor('id', {}),
-    columnHelper.accessor('name', { header: 'Название' }),
-    columnHelper.accessor('description', { header: 'Описание' }),
+    {
+      accessorKey: 'id',
+      header: 'ID',
+    },
+    {
+      accessorKey: 'name',
+      header: 'Название',
+    },
+    {
+      accessorKey: 'experience.name',
+      header: 'Опыт работы',
+    },
+    {
+      accessorKey: 'schedule.name',
+      header: 'Режим работы',
+    },
     columnHelper.group({
       header: 'Зарплата',
       columns: [
-        columnHelper.accessor('salary.from', { header: 'От' }),
-        columnHelper.accessor('salary.to', { header: 'До' }),
-        columnHelper.accessor('salary.currency', {
-          header: 'Валюта', cell: (props) => {
+        {
+          accessorKey: 'salary.from',
+          header: 'От',
+        },
+        {
+          accessorKey: 'salary.to',
+          header: 'До',
+        },
+        {
+          accessorKey: 'salary.currency',
+          header: 'Валюта',
+          cell: (props) => {
             const currencyCode = props.getValue();
             const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
 
             return currencyItem ? currencyItem.abbr : currencyCode;
           },
-        }),
-        columnHelper.accessor('salary.gross', {
-          header: 'Налоги', cell: (props) => {
+        },
+        {
+          accessorKey: 'salary.gross',
+          header: 'Налоги',
+          cell: (props) => {
             const isGross = props.getValue();
 
             return isGross ? 'До вычета' : 'После вычета';
           },
-        }),
+        },
       ],
     }),
   ], [dictionaries]);
 };
 
-export function Table({ vacancies }: { vacancies: VacancyCommonFields[] }) {
+export function Table({ vacancies }: { vacancies: TVacancyOverview[] }) {
   const columns = useColumns();
-  // TODO: разрулить типы
-  const table = useReactTable({
+  // TODO: разрулить типы более красиво
+  const table = useReactTable<TVacancyOverview>({
     data: vacancies,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  });
+  } as TableOptions<TVacancyOverview>);
 
   return (
-    <div className="p-2">
+    <div>
       <table>
         <thead>
         {table.getHeaderGroups().map(headerGroup => (

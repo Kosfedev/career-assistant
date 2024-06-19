@@ -1,1 +1,1 @@
-export { VacancyCommonFields } from './models';
+export { TVacancyOverview } from './models';

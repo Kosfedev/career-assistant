@@ -1,24 +1,18 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useLocalStorage } from 'usehooks-ts';
+
+import { useGetDictionaries, useLSDictionaries } from '@/entities/dictionaries';
 
 export function CommonApi() {
-  // TODO: вынести ключ 'dictionaries'
-  const [dictionaries, setDictionaries] = useLocalStorage<any>('dictionaries', null);
-  // TODO: разрулить типы
-  const { data, isFetched } = useQuery({
-    queryKey: ['dictionaries'],
-    queryFn: () => fetch('https://api.hh.ru/dictionaries').then(res => res.json()),
-    enabled: !dictionaries,
-  });
+  const [savedDictionaries, setSavedDictionaries] = useLSDictionaries();
+  const { data: newDictionaries, isFetched } = useGetDictionaries({ enabled: !savedDictionaries });
 
   useEffect(() => {
     if (isFetched) {
-      setDictionaries(data);
+      setSavedDictionaries(newDictionaries);
     }
-  }, [data, isFetched, setDictionaries]);
+  }, [newDictionaries, isFetched, setSavedDictionaries]);
 
   return null;
 }

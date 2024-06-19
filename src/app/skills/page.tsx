@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
+
+import { BACKEND_BASE_URL } from '@/shared/config/backend';
 
 type SuggestedSkill = { id: number; text: string };
 
@@ -9,12 +11,14 @@ export default function SkillsPage() {
   const [skill, setSkill] = useState('');
   const [stagedSkills, setStagedSkills] = useState<SuggestedSkill[]>([]);
   const [savedSkills, setSavedSkills] = useState<SuggestedSkill[]>([]);
+  // TODO: разрулить типы более красиво
   const { data: suggestedSkills, isFetching, refetch } = useQuery({
-    queryKey: ['get-skill-set-suggests'],
-    queryFn: () => fetch(`https://api.hh.ru/suggests/skill_set?text=${skill}`).then(res => res.json()),
+    queryKey: ['get-skill-set-suggests', skill],
+    queryFn: () => fetch(`${BACKEND_BASE_URL}/suggests/skill_set?text=${skill}`).then(res => res.json()),
     enabled: false,
-  });
+  } as DefinedInitialDataOptions<{ items: SuggestedSkill[] }>);
 
+  // TODO: вынести магические числа
   const isSearchDisabled = isFetching || skill.length < 2 || skill.length > 3000;
 
   const changeSkill = (e: React.ChangeEvent<HTMLInputElement>) => {

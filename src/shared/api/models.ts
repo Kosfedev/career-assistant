@@ -1,3 +1,3 @@
 import type { components } from '../schemas/hh';
 
-export type VacancyCommonFields = components['schemas']['VacanciesVacancyCommonFields'];
+export type TVacancyOverview = components['schemas']['VacanciesVacanciesItem'];
