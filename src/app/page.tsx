@@ -6,8 +6,10 @@ import { Table } from '../features/vacancies-table/ui/VacanciesTable';
 import { VacancyCommonFields } from '../shared/api/models';
 
 export default function Home() {
+  // TODO: заменить тип на корректный
   const [vacancies, setVacancies] = useState<VacancyCommonFields[]>([]);
 
+  // TODO: отрефачить в RQ
   const getData = async () => {
     const url = "https://api.hh.ru/vacancies?text='frontend удаленная работа'&per_page=50&only_with_salary=true";
     const res = await fetch(url);

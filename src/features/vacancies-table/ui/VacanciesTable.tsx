@@ -6,37 +6,48 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { VacancyCommonFields } from '../../../shared/api/models';
+import { useMemo } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 
 const columnHelper = createColumnHelper<VacancyCommonFields>();
 
-const columns = [
-  columnHelper.accessor('id', {}),
-  columnHelper.accessor('name', { header: 'Название' }),
-  columnHelper.accessor('description', { header: 'Описание' }),
-  columnHelper.group({
-    header: 'Зарплата',
-    columns: [
-      columnHelper.accessor('salary.from', { header: 'От' }),
-      columnHelper.accessor('salary.to', { header: 'До' }),
-      columnHelper.accessor('salary.currency', {
-        header: 'Валюта', cell: (props) => {
-          const currency = props.getValue();
+const useColumns = () => {
+  // TODO: вынести ключ 'dictionaries'
+  const [dictionaries] = useLocalStorage<any>('dictionaries', null);
 
-          return currency === 'RUR' ? 'Руб. РФ' : currency;
-        },
-      }),
-      columnHelper.accessor('salary.gross', {
-        header: 'Налоги', cell: (props) => {
-          const isGross = props.getValue();
+  return useMemo(() => [
+    // TODO: разрулить типы
+    columnHelper.accessor('id', {}),
+    columnHelper.accessor('name', { header: 'Название' }),
+    columnHelper.accessor('description', { header: 'Описание' }),
+    columnHelper.group({
+      header: 'Зарплата',
+      columns: [
+        columnHelper.accessor('salary.from', { header: 'От' }),
+        columnHelper.accessor('salary.to', { header: 'До' }),
+        columnHelper.accessor('salary.currency', {
+          header: 'Валюта', cell: (props) => {
+            const currencyCode = props.getValue();
+            const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
 
-          return isGross ? 'До вычета' : 'После вычета';
-        },
-      }),
-    ],
-  }),
-];
+            return currencyItem ? currencyItem.abbr : currencyCode;
+          },
+        }),
+        columnHelper.accessor('salary.gross', {
+          header: 'Налоги', cell: (props) => {
+            const isGross = props.getValue();
+
+            return isGross ? 'До вычета' : 'После вычета';
+          },
+        }),
+      ],
+    }),
+  ], [dictionaries]);
+};
 
 export function Table({ vacancies }: { vacancies: VacancyCommonFields[] }) {
+  const columns = useColumns();
+  // TODO: разрулить типы
   const table = useReactTable({
     data: vacancies,
     columns,
