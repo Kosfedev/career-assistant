@@ -2,27 +2,35 @@
 
 import React from 'react';
 import { useFormik } from 'formik';
-import { usePathname, useRouter } from 'next/navigation';
-import queryString from 'query-string';
+import { useCookies } from 'react-cookie';
 
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { TVacanciesFiltersInputs } from '../model/types';
-import { useFiltersInitialValues } from '../model/initial-values';
+import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
+import { FILTERS_COOKIE_NAME } from '../model/constants';
 
 export function VacanciesFilters(): React.ReactNode {
-  const router = useRouter();
-  const pathname = usePathname();
+  useFiltersStateManager();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setCookie] = useCookies([FILTERS_COOKIE_NAME]);
   const [dictionaries] = useLSDictionaries();
   const { employment, experience, schedule, currency }: TVacanciesFiltersInputs = dictionaries;
   const initialValues = useFiltersInitialValues();
 
   const { values, handleChange, handleSubmit } = useFormik({
     initialValues,
-    onSubmit: (v) => {
-      const query = queryString.stringify(v);
-      const correctPathName = pathname.replace(/^\//, '');
+    enableReinitialize: true,
+    onSubmit: (filters) => {
+      const filledFilters = {};
 
-      router.push(`${correctPathName}/?${query}`);
+      for (const filterName in filters) {
+        // TODO: сделать более точную проверку (чтобы потенциально не скипало 0)
+        if (!!filters[filterName]) {
+          filledFilters[filterName] = filters[filterName];
+        }
+      }
+
+      setCookie(FILTERS_COOKIE_NAME, filledFilters);
     },
   });
 
@@ -33,6 +41,7 @@ export function VacanciesFilters(): React.ReactNode {
   return (
     <form onSubmit={handleSubmit}>
       <label>Текст</label>
+      {/* TODO: пофиксить value у инпутов */}
       <input name={'text'}
              value={values.text}
              onChange={handleChange}
@@ -47,6 +56,7 @@ export function VacanciesFilters(): React.ReactNode {
               value={values.experience}
               onChange={handleChange}
       >
+        <option value="">{' '}</option>
         {experience?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
       </select>
       <label>Тип трудоустройства</label>
@@ -54,6 +64,7 @@ export function VacanciesFilters(): React.ReactNode {
               value={values.employment}
               onChange={handleChange}
       >
+        <option value="">{' '}</option>
         {employment?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
       </select>
       <label>Расписание</label>
@@ -62,6 +73,7 @@ export function VacanciesFilters(): React.ReactNode {
         value={values.schedule}
         onChange={handleChange}
       >
+        <option value="">{' '}</option>
         {schedule?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
       </select>
       <label>Только с зарплатой</label>
@@ -75,6 +87,7 @@ export function VacanciesFilters(): React.ReactNode {
               value={values.currency}
               onChange={handleChange}
       >
+        <option value="">{' '}</option>
         {currency?.map(({ code, name }) => <option key={code} value={code}>{code} {name}</option>)}
       </select>
       <label>Зарплата</label>
