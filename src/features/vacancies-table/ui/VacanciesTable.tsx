@@ -67,7 +67,7 @@ const useColumns = (): TableOptions<TVacancyOverview>['columns'] => {
   ], [dictionaries]);
 };
 
-export function Table({ vacancies }: { vacancies: TVacancyOverview[] }) {
+export function VacanciesTable({ vacancies }: { vacancies: TVacancyOverview[] }) {
   const columns = useColumns();
   // TODO: разрулить типы более красиво
   const table = useReactTable<TVacancyOverview>({

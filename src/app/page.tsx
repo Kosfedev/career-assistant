@@ -1,12 +1,15 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 
-import { Table } from '@/features/vacancies-table/ui/VacanciesTable';
+import { VacanciesTable } from '@/features/vacancies-table';
 import { TVacancyOverview } from '@/shared/api/models';
-import { BACKEND_BASE_URL } from '@/shared/config/backend';
 
+import { BACKEND_BASE_URL } from '@/shared/config/backend';
 import styles from './page.module.css';
+
+const VacanciesFilters = dynamic(() => import('@/features/vacancies-filters/').then(mod => mod.VacanciesFilters), { ssr: false });
 
 export default function Home() {
   // TODO: разрулить типы более красиво
@@ -21,7 +24,8 @@ export default function Home() {
       <button onClick={fetchVacancies} disabled={isFetching}>
         Сделать выгрузку
       </button>
-      <Table vacancies={vacancies} />
+      <VacanciesFilters />
+      <VacanciesTable vacancies={vacancies} />
     </main>
   );
 }
