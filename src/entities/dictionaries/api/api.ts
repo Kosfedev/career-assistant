@@ -1,6 +1,6 @@
 import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { BACKEND_BASE_URL } from '@/shared/config';
-import { TDictionaries } from './model';
+import { TDictionaries } from '../model/types';
 
 export const useGetDictionaries = ({ enabled }: { enabled?: boolean }) => {
   return useQuery({

@@ -5,14 +5,14 @@ import { useFormik } from 'formik';
 import { useCookies } from 'react-cookie';
 
 import { useLSDictionaries } from '@/entities/dictionaries';
+import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 import { TVacanciesFiltersInputs } from '../model/types';
 import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
-import { FILTERS_COOKIE_NAME } from '../model/constants';
 
 export function VacanciesFilters(): React.ReactNode {
   useFiltersStateManager();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setCookie] = useCookies([FILTERS_COOKIE_NAME]);
+  const [_, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
   const [dictionaries] = useLSDictionaries();
   const { employment, experience, schedule, currency }: TVacanciesFiltersInputs = dictionaries;
   const initialValues = useFiltersInitialValues();
@@ -21,7 +21,7 @@ export function VacanciesFilters(): React.ReactNode {
     initialValues,
     enableReinitialize: true,
     onSubmit: (filters) => {
-      const filledFilters = {};
+      const filledFilters = { page: 1 };
 
       for (const filterName in filters) {
         // TODO: сделать более точную проверку (чтобы потенциально не скипало 0)
@@ -30,7 +30,7 @@ export function VacanciesFilters(): React.ReactNode {
         }
       }
 
-      setCookie(FILTERS_COOKIE_NAME, filledFilters);
+      setCookie(VACANCIES_QUERY_COOKIE_NAME, filledFilters);
     },
   });
 

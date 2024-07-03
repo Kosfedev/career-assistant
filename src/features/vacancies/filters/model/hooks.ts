@@ -3,10 +3,10 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCookies } from 'react-cookie';
 import queryString from 'query-string';
 
-import { FILTERS_COOKIE_NAME } from './constants';
+import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 
 export const useFiltersInitialValues = () => {
-  const [cookies] = useCookies([FILTERS_COOKIE_NAME]);
+  const [cookies] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
   const { employment, experience, schedule, currency } = cookies['vacancies-filters'] ?? {};
 
   return useMemo(() => ({
@@ -27,14 +27,14 @@ export const useFiltersStateManager = () => {
   const searchParams = useSearchParams();
   const params = Object.fromEntries(searchParams.entries());
   const paramsString = queryString.stringify(params);
-  const [cookies, setCookie] = useCookies([FILTERS_COOKIE_NAME]);
-  const filtersCookie = cookies[FILTERS_COOKIE_NAME];
+  const [cookies, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
+  const filtersCookie = cookies[VACANCIES_QUERY_COOKIE_NAME];
 
   useEffect(() => {
     const isCurrentParams = paramsString.length > 0;
 
     if (isCurrentParams) {
-      setCookie(FILTERS_COOKIE_NAME, params);
+      setCookie(VACANCIES_QUERY_COOKIE_NAME, params);
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

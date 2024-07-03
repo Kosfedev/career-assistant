@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
-import { TVacancyOverview } from '@/shared/api';
+import { TVacancyOverview } from '@/entities/vacancies';
 import { useLSDictionaries } from '@/entities/dictionaries';
 
 const columnHelper = createColumnHelper<TVacancyOverview>();
