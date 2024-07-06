@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
-import { TVacancyOverview } from '@/entities/vacancies';
+import { TVacancyOverview, useSaveVacancyOverview } from '@/entities/vacancies';
 import { useLSDictionaries } from '@/entities/dictionaries';
 
 const columnHelper = createColumnHelper<TVacancyOverview>();
 
 export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => {
   const [dictionaries] = useLSDictionaries();
+  const saveVacancyOverview = useSaveVacancyOverview();
 
   return useMemo(() => [
     {
@@ -32,12 +33,10 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
         {
           accessorKey: 'salary.from',
           header: 'От',
-        },
-        {
+        }, {
           accessorKey: 'salary.to',
           header: 'До',
-        },
-        {
+        }, {
           accessorKey: 'salary.currency',
           header: 'Валюта',
           cell: (props) => {
@@ -46,8 +45,7 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
 
             return currencyItem ? currencyItem.abbr : currencyCode;
           },
-        },
-        {
+        }, {
           accessorKey: 'salary.gross',
           header: 'Налоги',
           cell: (props) => {
@@ -58,5 +56,16 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
         },
       ],
     }),
-  ], [dictionaries]);
+    columnHelper.display({
+      id: 'actions',
+      cell: ({ row }) => (
+        <>
+          <button onClick={() => {
+            saveVacancyOverview(row.original, 1);
+          }}>Добавить
+          </button>
+        </>
+      ),
+    }),
+  ], [dictionaries?.currency, saveVacancyOverview]);
 };

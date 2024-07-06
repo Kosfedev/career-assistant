@@ -1,1 +1,1 @@
-export { VacanciesPagination } from './ui/Pagination';
+export { VacanciesPagination } from './ui/VacanciesPagination';

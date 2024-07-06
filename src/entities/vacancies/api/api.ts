@@ -1,15 +1,10 @@
-import { useSearchParams } from 'next/navigation';
 import queryString from 'query-string';
 import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
-
 import { BACKEND_BASE_URL } from '@/shared/config';
 import { TVacancyResponse } from '../model/types';
 
-export const useGetVacancies = () => {
-  const searchParams = useSearchParams();
-  const params = Object.fromEntries(searchParams.entries());
-  const fixedParams = { ...params, page: params.page ? params.page - 1 : 0 };
-  const paramsString = queryString.stringify(fixedParams, { skipNull: true, skipEmptyString: true });
+export const useGetHHVacancies = (params: { [p: string]: string }) => {
+  const paramsString = queryString.stringify(params, { skipNull: true, skipEmptyString: true });
 
   // TODO: разрулить типы более красиво
   return useQuery({

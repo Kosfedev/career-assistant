@@ -7,7 +7,7 @@ import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 
 export const useFiltersInitialValues = () => {
   const [cookies] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
-  const { employment, experience, schedule, currency } = cookies['vacancies-filters'] ?? {};
+  const { employment, experience, schedule, currency } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};
 
   return useMemo(() => ({
     text: '',
@@ -18,7 +18,12 @@ export const useFiltersInitialValues = () => {
     currency: currency ?? '',
     salary: '',
     only_with_salary: false,
-  }), [currency, employment, experience, schedule]);
+  }), [
+    currency,
+    employment,
+    experience,
+    schedule,
+  ]);
 };
 
 export const useFiltersStateManager = () => {
@@ -50,5 +55,10 @@ export const useFiltersStateManager = () => {
     }
 
     router.push(`${correctPathName}/?${cookieFilters}`);
-  }, [filtersCookie, paramsString, pathname, router]);
+  }, [
+    filtersCookie,
+    paramsString,
+    pathname,
+    router,
+  ]);
 };

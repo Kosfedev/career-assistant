@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   flexRender,
   getCoreRowModel,
@@ -10,38 +10,35 @@ import {
 import { TVacancyOverview } from '@/entities/vacancies';
 import { useTableColumns } from '../model/columns-config';
 
-const useTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
-  useMemo(() =>
-    headerGroups.map(headerGroup => (
-      <tr key={headerGroup.id}>
-        {headerGroup.headers.map(header => (
-          <th key={header.id}>
-            {header.isPlaceholder
-              ? null
-              : flexRender(
-                header.column.columnDef.header,
-                header.getContext(),
-              )}
-          </th>
-        ))}
-      </tr>
-    )), [headerGroups],
-  );
+const getTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
+  headerGroups.map(headerGroup => (
+    <tr key={headerGroup.id}>
+      {headerGroup.headers.map(header => (
+        <th key={header.id}>
+          {header.isPlaceholder
+            ? null
+            : flexRender(
+              header.column.columnDef.header,
+              header.getContext(),
+            )}
+        </th>
+      ))}
+    </tr>
+  ));
 
 
-const useTableBodyRows = (rows: Row<RowData>[]) =>
-  useMemo(() =>
-    rows.map(row => (
-      <tr key={row.id}>
-        {row.getVisibleCells().map(cell => (
+const getTableBodyRows = (rows: Row<RowData>[]) =>
+  rows.map((row) =>
+    <tr key={row.id}>
+      {row.getVisibleCells().map(cell => {
+        return (
           <td key={cell.id}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </td>
-        ))}
-      </tr>
-    )), [rows],
+        );
+      })}
+    </tr>,
   );
-
 
 export function VacanciesTable({ vacancies = [] }: { vacancies: TVacancyOverview[] }) {
   const columns = useTableColumns();
@@ -51,8 +48,8 @@ export function VacanciesTable({ vacancies = [] }: { vacancies: TVacancyOverview
     columns,
     getCoreRowModel: getCoreRowModel(),
   } as TableOptions<TVacancyOverview>);
-  const headRows = useTableHeadRows(table.getHeaderGroups());
-  const bodyRows = useTableBodyRows(table.getRowModel().rows);
+  const headRows = getTableHeadRows(table.getHeaderGroups());
+  const bodyRows = getTableBodyRows(table.getRowModel().rows);
 
   return (
     <table>

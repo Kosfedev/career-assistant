@@ -9,5 +9,40 @@
     "project": [
       "tsconfig.json"
     ]
+  },
+  "rules": {
+    "curly": "error",
+    "array-bracket-newline": [
+      "error",
+      {
+        "multiline": true
+      }
+    ],
+    "array-element-newline": [
+      "error",
+      {
+        "ArrayExpression": {
+          "minItems": 5
+        },
+        "ArrayPattern": "never"
+      }
+    ],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": {
+          "multiline": true
+        },
+        "ObjectPattern": {
+          "multiline": true
+        },
+        "ImportDeclaration": {
+          "multiline": true
+        },
+        "ExportDeclaration": {
+          "multiline": true
+        }
+      }
+    ]
   }
 }

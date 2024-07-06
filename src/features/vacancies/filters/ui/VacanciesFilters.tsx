@@ -10,6 +10,7 @@ import { TVacanciesFiltersInputs } from '../model/types';
 import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
 
 export function VacanciesFilters(): React.ReactNode {
+  // TODO: вынести в page.tsx - влияет и на пагинацию и табы -> должно быть в виджете/странице
   useFiltersStateManager();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
