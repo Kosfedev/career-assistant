@@ -3,6 +3,7 @@ import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
 import { TVacancyOverview, useSaveVacancyOverview } from '@/entities/vacancies';
 import { useLSDictionaries } from '@/entities/dictionaries';
+import Link from 'next/link';
 
 const columnHelper = createColumnHelper<TVacancyOverview>();
 
@@ -40,6 +41,7 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
           accessorKey: 'salary.currency',
           header: 'Валюта',
           cell: (props) => {
+            // TODO: вынести в lib
             const currencyCode = props.getValue();
             const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
 
@@ -61,9 +63,12 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
       cell: ({ row }) => (
         <>
           <button onClick={() => {
+            {/* TODO: add enum or const */
+            }
             saveVacancyOverview(row.original, 1);
           }}>Добавить
           </button>
+          <Link href={`/vacancies/${row.original.id}`}>{'->'}</Link>
         </>
       ),
     }),

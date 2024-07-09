@@ -3,7 +3,7 @@ import { DefinedInitialDataOptions, useQuery } from '@tanstack/react-query';
 import { BACKEND_BASE_URL } from '@/shared/config';
 import { TVacancyResponse } from '../model/types';
 
-export const useGetHHVacancies = (params: { [p: string]: string }) => {
+export const useGetHHVacancies = (params: { [p: string]: string } = {}) => {
   const paramsString = queryString.stringify(params, { skipNull: true, skipEmptyString: true });
 
   // TODO: разрулить типы более красиво
