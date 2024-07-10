@@ -3,6 +3,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useCookies } from 'react-cookie';
+import { Checkbox, Select, TextField, MenuItem } from '@mui/material';
 
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
@@ -15,10 +16,11 @@ export function VacanciesFilters(): React.ReactNode {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
   const [dictionaries] = useLSDictionaries();
-  const { employment, experience, schedule, currency }: TVacanciesFiltersInputs = dictionaries;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const { employment, experience, schedule, currency, vacancy_search_fields }: TVacanciesFiltersInputs = dictionaries;
   const initialValues = useFiltersInitialValues();
 
-  const { values, handleChange, handleSubmit } = useFormik({
+  const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues,
     enableReinitialize: true,
     onSubmit: (filters) => {
@@ -40,65 +42,85 @@ export function VacanciesFilters(): React.ReactNode {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <label>Текст</label>
-      {/* TODO: пофиксить value у инпутов */}
-      <input name={'text'}
-             value={values.text}
-             onChange={handleChange}
-      />
-      <label>Поиск</label>
-      <input name={'search_field'}
-             value={values.search_field}
-             onChange={handleChange}
-      />
-      <label>Опыт работы</label>
-      <select name={'experience'}
-              value={values.experience}
-              onChange={handleChange}
-      >
-        <option value="">{' '}</option>
-        {experience?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-      </select>
-      <label>Тип трудоустройства</label>
-      <select name={'employment'}
-              value={values.employment}
-              onChange={handleChange}
-      >
-        <option value="">{' '}</option>
-        {employment?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-      </select>
-      <label>Расписание</label>
-      <select
-        name={'schedule'}
-        value={values.schedule}
-        onChange={handleChange}
-      >
-        <option value="">{' '}</option>
-        {schedule?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-      </select>
-      <label>Только с зарплатой</label>
-      <input name={'only_with_salary'}
-             value={values.only_with_salary}
-             onChange={handleChange}
-             type="checkbox"
-      />
-      <label>Валюта</label>
-      <select name={'currency'}
-              value={values.currency}
-              onChange={handleChange}
-      >
-        <option value="">{' '}</option>
-        {currency?.map(({ code, name }) => <option key={code} value={code}>{code} {name}</option>)}
-      </select>
-      <label>Зарплата</label>
-      <input name={'salary'}
-             value={values.salary}
-             onChange={handleChange}
-             type={'number'}
-      />
-      <button type="submit">
-        Применить
+    <form onSubmit={handleSubmit} className="flex mb-4 *:ml-4 first:*:ml-0">
+      <div className="flex flex-col *:mt-2 first:*:mt-0">
+        <TextField name="text"
+                   value={values.text}
+                   label="Текст"
+                   className="w-60"
+                   onChange={handleChange}
+        />
+        <Select name="search_field"
+                value={values.search_field}
+                label="Где искать"
+                className="w-60"
+                onChange={handleChange}
+        >
+          <MenuItem value="">-</MenuItem>
+          {vacancy_search_fields?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+        </Select>
+      </div>
+      <div className="flex flex-col *:mt-2 first:*:mt-0">
+        <Select name="employment"
+                value={values.employment}
+                label="Тип трудоустройства"
+                className="w-60"
+                onChange={handleChange}
+        >
+          <MenuItem value="">-</MenuItem>
+          {employment?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+        </Select>
+        <Select
+          name="schedule"
+          value={values.schedule}
+          labelId="demo-simple-select-label"
+          label="Расписание"
+          aria-disabled={false}
+          className="w-60"
+          onChange={handleChange}
+        >
+          <MenuItem value="">-</MenuItem>
+          {schedule?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+        </Select>
+      </div>
+      <div className="flex flex-col *:mt-2 first:*:mt-0">
+        <div className="flex items-center w-60 h-14 text-primary-500">
+          <label htmlFor="with-salary">Только с зарплатой</label>
+          <Checkbox name="only_with_salary"
+                    id="with-salary"
+                    checked={values.only_with_salary}
+                    onChange={() => setFieldValue('only_with_salary', !values.only_with_salary)}
+          />
+        </div>
+        <Select name="experience"
+                value={values.experience}
+                label={'Опыт работы'}
+                className="w-60"
+                onChange={handleChange}
+        >
+          <MenuItem value="">-</MenuItem>
+          {experience?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+        </Select>
+      </div>
+      <div className="flex flex-col *:mt-2 first:*:mt-0">
+        <Select name="currency"
+                value={values.currency}
+                label="Валюта"
+                onChange={handleChange}
+        >
+          <MenuItem value="">-</MenuItem>
+          {currency?.map(({ code, name }) => <MenuItem key={code} value={code}>{code} {name}</MenuItem>)}
+        </Select>
+        <TextField name="salary"
+                   value={values.salary}
+                   label="Зарплата"
+                   onChange={handleChange}
+        />
+      </div>
+      <button
+        className="w-40 h-14 p-2 rounded-3xl bg-primary-400 hover:bg-primary-300 active:bg-primary-200"
+        type="submit">
+        Найти
       </button>
     </form>
   );

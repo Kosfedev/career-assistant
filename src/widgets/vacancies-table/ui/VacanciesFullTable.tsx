@@ -22,7 +22,7 @@ export function VacanciesFullTable() {
       <div className={'mt-6 p-4 bg-dark-200 rounded-lg'}>
         {tab === DEFAULT_TAB_NAME && <VacanciesFilters />}
         <VacanciesTable vacancies={vacancies} />
-        <VacanciesPagination pagination={{ page, pages, per_page, found }} />
+        {tab === DEFAULT_TAB_NAME && <VacanciesPagination pagination={{ page, pages, per_page, found }} />}
       </div>
     </section>
   );

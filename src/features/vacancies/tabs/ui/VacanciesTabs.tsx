@@ -17,12 +17,12 @@ export function VacanciesTabs(): React.ReactNode {
   }, [cookies, setCookie]);
 
   return (
-    <Tabs value={tab} className="bg-dark-200 rounded-lg last:*:*:bg-primary-100" onChange={handleTabChange}>
+    <Tabs value={tab} className="bg-dark-200 rounded-lg last:*:*:bg-primary-300" onChange={handleTabChange}>
       {tabsConfig.map(({ value, text }) => (
         <Tab key={value}
              className={{
-               'text-primary-300 hover:text-primary-200': true,
-               '!text-primary-100': value === tab,
+               'text-primary-500 hover:text-primary-400 grow': true,
+               '!text-primary-300': value === tab,
              }}
              id={value}
              label={text}

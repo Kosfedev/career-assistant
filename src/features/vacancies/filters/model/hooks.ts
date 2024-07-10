@@ -7,22 +7,37 @@ import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 
 export const useFiltersInitialValues = () => {
   const [cookies] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
-  const { employment, experience, schedule, currency } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};
+  const {
+    currency,
+    employment,
+    experience,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    only_with_salary,
+    salary,
+    schedule,
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    search_field,
+    text,
+  } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};
 
   return useMemo(() => ({
-    text: '',
-    search_field: '',
+    text: text ?? '',
+    search_field: search_field ?? '',
     employment: employment ?? '',
     experience: experience ?? '',
     schedule: schedule ?? '',
     currency: currency ?? '',
-    salary: '',
-    only_with_salary: false,
+    salary: salary ?? '',
+    only_with_salary: only_with_salary ?? false,
   }), [
     currency,
     employment,
     experience,
+    only_with_salary,
+    salary,
     schedule,
+    search_field,
+    text,
   ]);
 };
 
@@ -55,10 +70,5 @@ export const useFiltersStateManager = () => {
     }
 
     router.push(`${correctPathName}/?${cookieFilters}`);
-  }, [
-    filtersCookie,
-    paramsString,
-    pathname,
-    router,
-  ]);
+  }, [filtersCookie, paramsString, pathname, router]);
 };

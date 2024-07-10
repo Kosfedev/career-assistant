@@ -52,7 +52,7 @@ export function VacanciesTable({ vacancies = [] }: { vacancies: TVacancyOverview
   const bodyRows = getTableBodyRows(table.getRowModel().rows);
 
   return (
-    <table>
+    <table className="w-full">
       <thead className="border-b-2">
       {headRows}
       </thead>

@@ -23,11 +23,11 @@ export function VacanciesPagination({ pagination }: { pagination: TPagination })
       previousLabel="<"
       renderOnZeroPageCount={null}
       className="flex justify-end mt-5"
-      pageClassName="ml-3 text-primary-300 hover:text-primary-200"
-      activeLinkClassName="text-primary-100"
-      breakClassName="ml-3 text-primary-300 hover:text-primary-200"
-      previousClassName="mr-1 text-primary-300 hover:text-primary-200"
-      nextClassName="ml-4 text-primary-300 hover:text-primary-200"
+      pageClassName="ml-3 text-primary-500 hover:text-primary-400"
+      activeLinkClassName="text-primary-300"
+      breakClassName="ml-3 text-primary-500 hover:text-primary-400"
+      previousClassName="mr-1 text-primary-500 hover:text-primary-400"
+      nextClassName="ml-4 text-primary-500 hover:text-primary-400"
       disabledLinkClassName="text-dark-600"
     />
   );
