@@ -40,7 +40,7 @@ export function VacanciesFilters(): React.ReactNode {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="mb-4">
       <label>Текст</label>
       {/* TODO: пофиксить value у инпутов */}
       <input name={'text'}

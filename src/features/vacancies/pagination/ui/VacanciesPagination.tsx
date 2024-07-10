@@ -16,12 +16,19 @@ export function VacanciesPagination({ pagination }: { pagination: TPagination })
   return (
     <ReactPaginate
       breakLabel="..."
-      nextLabel="next >"
+      nextLabel=">"
       onPageChange={handlePageClick}
       pageRangeDisplayed={5}
       pageCount={pagination?.pages}
-      previousLabel="< previous"
+      previousLabel="<"
       renderOnZeroPageCount={null}
+      className="flex justify-end mt-5"
+      pageClassName="ml-3 text-primary-300 hover:text-primary-200"
+      activeLinkClassName="text-primary-100"
+      breakClassName="ml-3 text-primary-300 hover:text-primary-200"
+      previousClassName="mr-1 text-primary-300 hover:text-primary-200"
+      nextClassName="ml-4 text-primary-300 hover:text-primary-200"
+      disabledLinkClassName="text-dark-600"
     />
   );
 }

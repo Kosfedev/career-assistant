@@ -1,2 +1,5 @@
 # schemas
 src/shared/schemas/*
+
+# configs
+*.config.js

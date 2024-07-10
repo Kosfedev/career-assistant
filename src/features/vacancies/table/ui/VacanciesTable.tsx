@@ -14,7 +14,7 @@ const getTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
   headerGroups.map(headerGroup => (
     <tr key={headerGroup.id}>
       {headerGroup.headers.map(header => (
-        <th key={header.id}>
+        <th key={header.id} className="px-1 py-2">
           {header.isPlaceholder
             ? null
             : flexRender(
@@ -28,11 +28,11 @@ const getTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
 
 
 const getTableBodyRows = (rows: Row<RowData>[]) =>
-  rows.map((row) =>
-    <tr key={row.id}>
+  rows.map((row, index) =>
+    <tr key={row.id} className={index % 2 === 1 && 'bg-dark-300'}>
       {row.getVisibleCells().map(cell => {
         return (
-          <td key={cell.id}>
+          <td key={cell.id} className="px-1 py-2">
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </td>
         );
@@ -53,7 +53,7 @@ export function VacanciesTable({ vacancies = [] }: { vacancies: TVacancyOverview
 
   return (
     <table>
-      <thead>
+      <thead className="border-b-2">
       {headRows}
       </thead>
       <tbody>

@@ -28,36 +28,34 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
       accessorKey: 'schedule.name',
       header: 'Режим работы',
     },
-    columnHelper.group({
-      header: 'Зарплата',
-      columns: [
-        {
-          accessorKey: 'salary.from',
-          header: 'От',
-        }, {
-          accessorKey: 'salary.to',
-          header: 'До',
-        }, {
-          accessorKey: 'salary.currency',
-          header: 'Валюта',
-          cell: (props) => {
-            // TODO: вынести в lib
-            const currencyCode = props.getValue();
-            const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
+    {
+      accessorKey: 'salary.from',
+      header: 'От',
+    },
+    {
+      accessorKey: 'salary.to',
+      header: 'До',
+    },
+    {
+      accessorKey: 'salary.currency',
+      header: 'Валюта',
+      cell: (props) => {
+        // TODO: вынести в lib
+        const currencyCode = props.getValue();
+        const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
 
-            return currencyItem ? currencyItem.abbr : currencyCode;
-          },
-        }, {
-          accessorKey: 'salary.gross',
-          header: 'Налоги',
-          cell: (props) => {
-            const isGross = props.getValue();
+        return currencyItem ? currencyItem.abbr : currencyCode;
+      },
+    },
+    {
+      accessorKey: 'salary.gross',
+      header: 'Налоги',
+      cell: (props) => {
+        const isGross = props.getValue();
 
-            return isGross ? 'До вычета' : 'После вычета';
-          },
-        },
-      ],
-    }),
+        return isGross ? 'До вычета' : 'После вычета';
+      },
+    },
     columnHelper.display({
       id: 'actions',
       cell: ({ row }) => (
