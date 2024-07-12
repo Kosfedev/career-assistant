@@ -29,7 +29,7 @@ const getTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
 
 const getTableBodyRows = (rows: Row<RowData>[]) =>
   rows.map((row, index) =>
-    <tr key={row.id} className={index % 2 === 1 && 'bg-dark-300'}>
+    <tr key={row.id} className={index % 2 === 1 ? 'bg-dark-300' : ''}>
       {row.getVisibleCells().map(cell => {
         return (
           <td key={cell.id} className="px-1 py-2">

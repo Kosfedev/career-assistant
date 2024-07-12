@@ -17,7 +17,7 @@ export default function RootLayout({ children }: Readonly<{
 }>) {
   return (
     <html lang="en">
-    <body className={`${inter.className} min-h-screen p-8 bg-dark-100`}>
+    <body className={`${inter.className} flex flex-col min-h-screen p-8 bg-dark-100`}>
     <Providers>
       <CommonApi />
       {children}

@@ -28,7 +28,7 @@ export const useFiltersInitialValues = () => {
     schedule: schedule ?? '',
     currency: currency ?? '',
     salary: salary ?? '',
-    only_with_salary: only_with_salary ?? false,
+    only_with_salary: only_with_salary === 'true',
   }), [
     currency,
     employment,
