@@ -12,6 +12,16 @@
   },
   "rules": {
     "curly": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "typeProperty",
+        "format": [
+          "camelCase",
+          "snake_case"
+        ]
+      }
+    ],
     "array-bracket-newline": [
       "error",
       {

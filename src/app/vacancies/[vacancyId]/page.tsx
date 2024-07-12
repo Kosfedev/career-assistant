@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { TVacancyDetails, useGetHHVacancyById } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 
@@ -22,14 +21,10 @@ const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => 
 
 export default function VacancyPage({ params }: { params: { vacancyId: string } }) {
   const { data: vacancy = {} } = useGetHHVacancyById(Number(params.vacancyId));
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { name, description, experience, salary, key_skills, schedule } = vacancy as TVacancyDetails;
 
   return (
-    <main className="flex-grow p-4 bg-dark-200 rounded-lg first:mt-0 *:mt-2">
-      <Link className="text-primary-500 hover:text-primary-400 active:text-primary-300" href="/">На
-        главную
-      </Link>
+    <section className="flex-grow p-4 bg-dark-200 rounded-lg first:mt-0 *:mt-2">
       <p>
         {name}
       </p>
@@ -49,6 +44,6 @@ export default function VacancyPage({ params }: { params: { vacancyId: string } 
           </ul>
         </div>
       )}
-    </main>
+    </section>
   );
 }

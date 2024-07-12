@@ -9,6 +9,7 @@ import { useLSDictionaries } from '@/entities/dictionaries';
 import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 import { TVacanciesFiltersInputs } from '../model/types';
 import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
+import { Button } from '@/shared/ui';
 
 export function VacanciesFilters(): React.ReactNode {
   // TODO: вынести в page.tsx - влияет и на пагинацию и табы -> должно быть в виджете/странице
@@ -16,7 +17,6 @@ export function VacanciesFilters(): React.ReactNode {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
   const [dictionaries] = useLSDictionaries();
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const { employment, experience, schedule, currency, vacancy_search_fields }: TVacanciesFiltersInputs = dictionaries;
   const initialValues = useFiltersInitialValues();
 
@@ -117,11 +117,9 @@ export function VacanciesFilters(): React.ReactNode {
                    onChange={handleChange}
         />
       </div>
-      <button
-        className="w-40 h-14 p-2 rounded-3xl bg-primary-400 hover:bg-primary-300 active:bg-primary-200"
-        type="submit">
+      <Button type="submit">
         Найти
-      </button>
+      </Button>
     </form>
   );
 }

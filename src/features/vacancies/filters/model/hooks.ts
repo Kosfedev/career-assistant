@@ -11,11 +11,9 @@ export const useFiltersInitialValues = () => {
     currency,
     employment,
     experience,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     only_with_salary,
     salary,
     schedule,
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     search_field,
     text,
   } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};

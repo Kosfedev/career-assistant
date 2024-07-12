@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Link } from '@/shared/ui';
 import { Providers } from './Providers';
 import { CommonApi } from './CommonApi';
-
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -17,10 +17,19 @@ export default function RootLayout({ children }: Readonly<{
 }>) {
   return (
     <html lang="en">
-    <body className={`${inter.className} flex flex-col min-h-screen p-8 bg-dark-100`}>
+    <body className={`${inter.className} flex min-h-screen p-8 bg-dark-100`}>
     <Providers>
       <CommonApi />
-      {children}
+      <aside className="p-4 rounded-lg bg-dark-400">
+        <ul>
+          <li><Link href="/">Вакансии</Link></li>
+          {/* TODO: справить подсказку */}
+          <li className="mt-2"><Link href="/skills">Навыки</Link></li>
+        </ul>
+      </aside>
+      <main className="grow flex flex-col px-8">
+        {children}
+      </main>
     </Providers>
     </body>
     </html>
