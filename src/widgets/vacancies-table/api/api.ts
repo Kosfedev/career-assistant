@@ -1,7 +1,7 @@
 import { useSearchParams } from 'next/navigation';
 import { TVacancyResponse, TVacancyStatus, useGetHHVacancies } from '@/entities/vacancies';
 import { EVacanciesTabs } from '@/features/vacancies/tabs';
-import { useGetLSVacancies } from '../model/local-storage';
+import { useGetLSVacanciesByStatus } from '../model/local-storage';
 
 export const useGetVacancies = () => {
   const searchParams = useSearchParams();
@@ -11,7 +11,7 @@ export const useGetVacancies = () => {
 
   // TODO: закинуть в useMemo, чтобы дергало что-то одно
   const { data: HHVacancies = {} as TVacancyResponse } = useGetHHVacancies(fixedParams);
-  const storedVacanciesByStatus = useGetLSVacancies(status);
+  const storedVacanciesByStatus = useGetLSVacanciesByStatus(status);
 
   return status === 0 ? HHVacancies : {
     page: 1,

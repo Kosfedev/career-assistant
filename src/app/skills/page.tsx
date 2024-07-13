@@ -3,15 +3,21 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { TextField } from '@mui/material';
-import { THHSuggestedSkill, useGetHHSuggestedSkills } from '@/entities/skills';
+import {
+  THHSuggestedSkill,
+  TSkill,
+  useSkillsLS,
+  useGetHHSuggestedSkills,
+} from '@/entities/skills';
 import { Button } from '@/shared/ui';
 
+// TODO: добавить lazy loading (ошибка при гидрации)
 export default function SkillsPage() {
   const [skill, setSkill] = useState('');
   const [stagedForSaveSkills, setStagedForSaveSkills] = useState<THHSuggestedSkill[]>([]);
-  const [stagedForDeleteSkills, setStagedForDeleteSkills] = useState<THHSuggestedSkill[]>([]);
-  const [savedSkills, setSavedSkills] = useState<THHSuggestedSkill[]>([]);
+  const [stagedForDeleteSkills, setStagedForDeleteSkills] = useState<TSkill[]>([]);
   const { data: suggestedSkills, refetch, isFetching } = useGetHHSuggestedSkills(skill);
+  const { skillsLS, saveSkillsLS, deleteSkillsLS } = useSkillsLS();
 
   // TODO: вынести магические числа
   const isSearchDisabled = isFetching || skill.length < 2 || skill.length > 3000;
@@ -38,7 +44,7 @@ export default function SkillsPage() {
     setStagedForSaveSkills(stagedSkillsNew);
   };
 
-  const toggleStagedForDeleteSkill = (newStagedSkill: THHSuggestedSkill) => {
+  const toggleStagedForDeleteSkill = (newStagedSkill: TSkill) => {
     const stagedSkillIndex = stagedForDeleteSkills.findIndex(({ id }) => id === newStagedSkill.id);
     const stagedSkillsNew = [...stagedForDeleteSkills];
 
@@ -51,14 +57,12 @@ export default function SkillsPage() {
   };
 
   const saveSkills = () => {
-    setSavedSkills([...savedSkills, ...stagedForSaveSkills]);
+    saveSkillsLS(stagedForSaveSkills);
     setStagedForSaveSkills([]);
   };
 
   const deleteSkills = () => {
-    const newSavedSkills = savedSkills.filter(({ text }) => !stagedForDeleteSkills.some((stagedForDelete) => stagedForDelete.text === text));
-
-    setSavedSkills(newSavedSkills);
+    deleteSkillsLS(stagedForDeleteSkills);
     setStagedForDeleteSkills([]);
   };
 
@@ -77,7 +81,7 @@ export default function SkillsPage() {
             <Button type="button"
                     key={skillSuggestion.id}
                     className={classNames('!min-w-12 h-auto mt-2 ml-2 !p-2 text-xs', { '!bg-primary-200': stagedForSaveSkills.some(({ id }) => id == skillSuggestion.id) })}
-                    disabled={savedSkills.some(({ id }) => id === skillSuggestion.id)}
+                    disabled={skillsLS.some(({ id }) => id === skillSuggestion.id)}
                     onClick={() => toggleStagedForSaveSkill(skillSuggestion)}
             >
               {skillSuggestion.text}
@@ -91,7 +95,7 @@ export default function SkillsPage() {
           Сохраненные навыки:
         </h2>
         <div className="min-h-40 min-w-60 max-w-80 pt-2 pr-4 pb-4 pl-2 rounded bg-dark-300">
-          {savedSkills.map(savedSkill => (
+          {skillsLS.map(savedSkill => (
             <Button type="button"
                     key={savedSkill.id}
                     className={classNames('!min-w-12 h-auto mt-2 ml-2 !p-2 text-xs', { '!bg-primary-200': stagedForDeleteSkills.some(({ id }) => id == savedSkill.id) })}

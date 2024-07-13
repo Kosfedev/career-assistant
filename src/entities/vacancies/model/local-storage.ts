@@ -2,10 +2,10 @@ import { useCallback } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { TVacanciesStorage, TVacancyOverview, TVacancyOverviewExtended, TVacancyStatus } from './types';
 
-export const useVacanciesOverviewStored = () => useLocalStorage<TVacanciesStorage>('vacancies-overview-stored', {});
+export const useLSVacanciesOverview = () => useLocalStorage<TVacanciesStorage>('vacancies-overview-stored', {});
 
 export const useSaveVacancyOverview = () => {
-  const [vacanciesStored, setVacanciesStored] = useVacanciesOverviewStored();
+  const [vacanciesStored, setVacanciesStored] = useLSVacanciesOverview();
 
   return useCallback((vacancy: TVacancyOverview, status: TVacancyStatus) => {
     const storedVacancy = vacanciesStored[vacancy.id];
@@ -20,5 +20,3 @@ export const useSaveVacancyOverview = () => {
     setVacanciesStored(newVacanciesStored);
   }, [setVacanciesStored, vacanciesStored]);
 };
-
-

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { useVacanciesOverviewStored, TVacancyStatus } from '@/entities/vacancies';
+import { useLSVacanciesOverview, TVacancyStatus } from '@/entities/vacancies';
 import { TVacancyOverviewExtended } from '@/entities/vacancies/model/types';
 
-export const useGetLSVacancies = (status: TVacancyStatus) => {
-  const [vacanciesStored] = useVacanciesOverviewStored();
+export const useGetLSVacanciesByStatus = (status: TVacancyStatus) => {
+  const [vacanciesStored] = useLSVacanciesOverview();
 
   return useMemo(() => {
     const vacanciesEntries = Object.entries(vacanciesStored);
