@@ -1,2 +1,3 @@
-export { Link } from './Link/Link';
-export { Button } from './Button/Button';
+export { Link } from './link/Link';
+export { Button } from './button/Button';
+export { PageHeader } from './page-header/PageHeader';

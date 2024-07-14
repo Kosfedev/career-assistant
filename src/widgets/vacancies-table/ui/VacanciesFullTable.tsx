@@ -8,7 +8,6 @@ import { DEFAULT_TAB_NAME, VacanciesTabs } from '@/features/vacancies/tabs';
 import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 import { useGetVacancies } from '../api/api';
 
-// TODO: починить подсказки
 const VacanciesFilters = dynamic(() => import('@/features/vacancies/filters/').then(mod => mod.VacanciesFilters), { ssr: false });
 
 export function VacanciesFullTable() {

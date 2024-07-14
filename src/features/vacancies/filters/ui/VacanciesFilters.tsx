@@ -11,7 +11,7 @@ import { TVacanciesFiltersInputs } from '../model/types';
 import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
 import { Button } from '@/shared/ui';
 
-export function VacanciesFilters(): React.ReactNode {
+export const VacanciesFilters = () => {
   // TODO: вынести в page.tsx - влияет и на пагинацию и табы -> должно быть в виджете/странице
   useFiltersStateManager();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -122,4 +122,4 @@ export function VacanciesFilters(): React.ReactNode {
       </Button>
     </form>
   );
-}
+};

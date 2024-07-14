@@ -3,6 +3,7 @@
 import React from 'react';
 import { TVacancyDetails, useGetHHVacancyById } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
+import { PageHeader } from '@/shared/ui';
 
 const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => {
   const [dictionaries] = useLSDictionaries();
@@ -25,9 +26,9 @@ export default function VacancyPage({ params }: { params: { vacancyId: string } 
 
   return (
     <section className="flex-grow p-4 bg-dark-200 rounded-lg first:mt-0 *:mt-2">
-      <p>
+      <PageHeader>
         {name}
-      </p>
+      </PageHeader>
       <p>
         {experience?.name}
       </p>
