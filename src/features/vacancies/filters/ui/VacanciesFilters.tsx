@@ -2,20 +2,17 @@
 
 import React from 'react';
 import { useFormik } from 'formik';
-import { useCookies } from 'react-cookie';
 import { Checkbox, Select, TextField, MenuItem } from '@mui/material';
 
 import { useLSDictionaries } from '@/entities/dictionaries';
-import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
-import { TVacanciesFiltersInputs } from '../model/types';
-import { useFiltersInitialValues, useFiltersStateManager } from '../model/hooks';
 import { Button } from '@/shared/ui';
+import { useAppNavigation } from '@/shared/lib';
+import { TVacanciesFiltersInputs } from '../model/types';
+import { useFiltersInitialValues } from '../model/filters-initial-values';
 
 export const VacanciesFilters = () => {
-  // TODO: вынести в page.tsx - влияет и на пагинацию и табы -> должно быть в виджете/странице
-  useFiltersStateManager();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
+  const { pushQuery } = useAppNavigation();
+
   const [dictionaries] = useLSDictionaries();
   const { employment, experience, schedule, currency, vacancy_search_fields }: TVacanciesFiltersInputs = dictionaries;
   const initialValues = useFiltersInitialValues();
@@ -33,7 +30,7 @@ export const VacanciesFilters = () => {
         }
       }
 
-      setCookie(VACANCIES_QUERY_COOKIE_NAME, filledFilters);
+      pushQuery(filledFilters);
     },
   });
 

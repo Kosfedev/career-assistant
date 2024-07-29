@@ -1,17 +1,16 @@
 import React, { useCallback } from 'react';
 import ReactPaginate from 'react-paginate';
-import { useCookies } from 'react-cookie';
-
-import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
+import { useAppNavigation } from '@/shared/lib';
 import { TPagination } from '../model/types';
 
 export function VacanciesPagination({ pagination }: { pagination: TPagination }) {
-  const [cookies, setCookie] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
-  const handlePageClick = useCallback(({ selected }: { selected: number }) => {
-    const newCookie = { ...cookies[VACANCIES_QUERY_COOKIE_NAME], page: selected + 1 };
+  const { searchParamsObj, pushQuery } = useAppNavigation();
 
-    setCookie(VACANCIES_QUERY_COOKIE_NAME, newCookie);
-  }, [cookies, setCookie]);
+  const handlePageClick = useCallback(({ selected }: { selected: number }) => {
+    const newParams = { ...searchParamsObj, page: selected + 1 };
+
+    pushQuery(newParams);
+  }, [pushQuery, searchParamsObj]);
 
   return (
     <ReactPaginate
@@ -19,7 +18,8 @@ export function VacanciesPagination({ pagination }: { pagination: TPagination })
       nextLabel=">"
       onPageChange={handlePageClick}
       pageRangeDisplayed={5}
-      pageCount={pagination?.pages}
+      pageCount={pagination.pages}
+      forcePage={pagination.page ? pagination.page - 1 : 0}
       previousLabel="<"
       renderOnZeroPageCount={null}
       className="flex justify-end mt-5"

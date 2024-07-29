@@ -1,12 +1,11 @@
 import { useMemo } from 'react';
-import { useLSVacanciesOverview, TVacancyStatus } from '@/entities/vacancies';
-import { TVacancyOverviewExtended } from '@/entities/vacancies/model/types';
+import { TVacancyStatus, TVacancyOverviewExtended, useVacanciesOverviewLS } from '@/entities/vacancies';
 
 export const useGetLSVacanciesByStatus = (status: TVacancyStatus) => {
-  const [vacanciesStored] = useLSVacanciesOverview();
+  const { vacanciesLS } = useVacanciesOverviewLS();
 
   return useMemo(() => {
-    const vacanciesEntries = Object.entries(vacanciesStored);
+    const vacanciesEntries = Object.entries(vacanciesLS);
     const vacanciesEntriesFiltered = vacanciesEntries
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .filter(([_, vacancy]) => (vacancy).status === status)
@@ -14,5 +13,5 @@ export const useGetLSVacanciesByStatus = (status: TVacancyStatus) => {
       .map(([_, vacancy]) => vacancy);
 
     return vacanciesEntriesFiltered as TVacancyOverviewExtended[];
-  }, [status, vacanciesStored]);
+  }, [status, vacanciesLS]);
 };

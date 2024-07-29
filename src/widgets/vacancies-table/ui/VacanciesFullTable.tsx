@@ -7,10 +7,12 @@ import { VacanciesPagination } from '@/features/vacancies/pagination';
 import { DEFAULT_TAB_NAME, VacanciesTabs } from '@/features/vacancies/tabs';
 import { VACANCIES_QUERY_COOKIE_NAME } from '@/entities/vacancies';
 import { useGetVacancies } from '../api/api';
+import { useQueryStateManager } from '../model/query-state-manager';
 
 const VacanciesFilters = dynamic(() => import('@/features/vacancies/filters/').then(mod => mod.VacanciesFilters), { ssr: false });
 
 export function VacanciesFullTable() {
+  useQueryStateManager();
   const { items: vacancies, page, pages, per_page, found } = useGetVacancies();
   const [cookies] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
   const { tab = DEFAULT_TAB_NAME } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};

@@ -10,7 +10,7 @@ export const SkillsAdder = () => {
   const [customSkill, setCustomSkill] = useState('');
   const [stagedForSaveHHSkills, setStagedForSaveHHSkills] = useState<THHSuggestedSkill[]>([]);
   const { data: suggestedSkills, refetch, isFetching } = useGetHHSuggestedSkills(skillSearch);
-  const { saveSkillsLS } = useSkillsLS();
+  const { skillsLS, saveSkillsLS } = useSkillsLS();
 
   // TODO: вынести магические числа
   const isSearchDisabled = isFetching || skillSearch.length < 2 || skillSearch.length > 3000;
@@ -69,6 +69,7 @@ export const SkillsAdder = () => {
           {suggestedSkills?.items.map(skillSuggestion => (
             <SkillBadge key={skillSuggestion.text}
                         skill={skillSuggestion}
+                        disabled={skillsLS.some(({ id }) => id === skillSuggestion.id)}
                         isActive={stagedForSaveHHSkills.some(({ id }) => id == skillSuggestion.id)}
                         onClick={() => toggleStagedForSaveSkill(skillSuggestion)}
             />
