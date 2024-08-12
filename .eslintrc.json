@@ -11,6 +11,12 @@
     ]
   },
   "rules": {
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
     "curly": "error",
     "@typescript-eslint/naming-convention": [
       "error",

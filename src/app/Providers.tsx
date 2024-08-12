@@ -3,21 +3,23 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CustomThemeConfig } from 'tailwindcss/types/config';
 import tailwindCSS from '../../tailwind.config';
 
 const queryClient = new QueryClient();
 
 // TODO: вынести в lib?
+const tailwindColors = (tailwindCSS.theme?.extend?.colors ?? {}) as CustomThemeConfig;
 const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: tailwindCSS.theme.extend.colors.primary[500],
-      light: tailwindCSS.theme.extend.colors.primary[600],
+      main: tailwindColors.primary[500],
+      light: tailwindColors.primary[600],
     },
-    secondary: { main: tailwindCSS.theme.extend.colors.primary[100] },
-    info: tailwindCSS.theme.extend.colors.primary,
-    text: { primary: tailwindCSS.theme.extend.colors.dark[600] },
+    secondary: { main: tailwindColors.primary[100] },
+    info: tailwindColors.primary,
+    text: { primary: tailwindColors.dark[600] },
   },
 });
 

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 // TODO: заменить на MUI component
-export const Button: React.FC<Partial<HTMLButtonElement> & { buttonType?: 'primary' | 'secondary', size?: 'medium' | 'small' }> = ({
+export const Button: React.FC<Partial<ButtonHTMLAttributes<HTMLButtonElement>> & { buttonType?: 'primary' | 'secondary', size?: 'medium' | 'small' }> = ({
   className,
   children,
   buttonType = 'primary',

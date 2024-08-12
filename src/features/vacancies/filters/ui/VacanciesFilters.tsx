@@ -7,26 +7,28 @@ import { Checkbox, Select, TextField, MenuItem } from '@mui/material';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { Button } from '@/shared/ui';
 import { useAppNavigation } from '@/shared/lib';
-import { TVacanciesFiltersInputs } from '../model/types';
 import { useFiltersInitialValues } from '../model/filters-initial-values';
+import { TVacanciesFiltersInputs } from '../model/types';
 
 export const VacanciesFilters = () => {
   const { pushQuery } = useAppNavigation();
 
   const [dictionaries] = useLSDictionaries();
-  const { employment, experience, schedule, currency, vacancy_search_fields }: TVacanciesFiltersInputs = dictionaries;
+  const { employment, experience, schedule, currency, vacancy_search_fields } = dictionaries ?? {};
   const initialValues = useFiltersInitialValues();
 
-  const { values, handleChange, handleSubmit, setFieldValue } = useFormik({
+  const { values, handleChange, handleSubmit, setFieldValue } = useFormik<TVacanciesFiltersInputs>({
     initialValues,
     enableReinitialize: true,
     onSubmit: (filters) => {
-      const filledFilters = { page: 1 };
+      const filledFilters: Record<string, unknown> = { page: 1 };
 
       for (const filterName in filters) {
+        const value = filters[filterName as keyof typeof filters];
+
         // TODO: сделать более точную проверку (чтобы потенциально не скипало 0)
-        if (!!filters[filterName]) {
-          filledFilters[filterName] = filters[filterName];
+        if (!!value) {
+          filledFilters[filterName] = value;
         }
       }
 

@@ -6,7 +6,6 @@ import {
   TableOptions,
   useReactTable,
 } from '@tanstack/react-table';
-
 import { TVacancyOverview } from '@/entities/vacancies';
 import { useTableColumns } from '../model/columns-config';
 
@@ -48,7 +47,7 @@ export function VacanciesTable({ vacancies = [] }: { vacancies: TVacancyOverview
     columns,
     getCoreRowModel: getCoreRowModel(),
   } as TableOptions<TVacancyOverview>);
-  const headRows = getTableHeadRows(table.getHeaderGroups());
+  const headRows = getTableHeadRows(table.getHeaderGroups() as HeaderGroup<RowData>[]);
   const bodyRows = getTableBodyRows(table.getRowModel().rows);
 
   return (

@@ -7,7 +7,7 @@ export const useAppNavigation = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const pushQuery = useCallback((query: string | Record<unknown, unknown>) => {
+  const pushQuery = useCallback((query: string | Record<string | number | symbol, unknown>) => {
     const newQuery = typeof query === 'string' ? query : queryString.stringify(query);
 
     router.push(`${pathname}?${newQuery}`);

@@ -1,6 +1,7 @@
-import { TDictionaries } from '@/entities/dictionaries';
+import { operations } from '@/shared/schemas/hh';
 
-// TODO: импортировать полностью из сгенерированных типов
+type TVacanciesQuery = Required<operations['get-vacancies']['parameters']>['query'];
 export type TVacanciesFiltersInputs =
-  { text?: string; salary?: number }
-  & Pick<TDictionaries, 'employment' | 'experience' | 'schedule' | 'currency' | 'vacancy_search_fields'>;
+  Pick<TVacanciesQuery, 'schedule' | 'only_with_salary' | 'currency' | 'text' | 'experience' | 'employment' | 'search_field'>
+  & { salary: string };
+export type TVacanciesFiltersInitialValues = Required<TVacanciesFiltersInputs>;

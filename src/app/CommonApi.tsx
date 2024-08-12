@@ -9,7 +9,7 @@ export function CommonApi() {
   const { data: newDictionaries, isFetched } = useGetDictionaries({ enabled: !savedDictionaries });
 
   useEffect(() => {
-    if (isFetched) {
+    if (isFetched && newDictionaries) {
       setSavedDictionaries(newDictionaries);
     }
   }, [newDictionaries, isFetched, setSavedDictionaries]);

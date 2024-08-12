@@ -23,7 +23,7 @@ export default function RootLayout({ children }: Readonly<{
       <aside className="p-4 rounded-lg bg-dark-400">
         <ul>
           <li><Link href="/">Вакансии</Link></li>
-          {/* TODO: справить подсказку */}
+          {/* TODO: исправить подсказку */}
           <li className="mt-2"><Link href="/skills">Навыки</Link></li>
         </ul>
       </aside>

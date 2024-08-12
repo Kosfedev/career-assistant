@@ -1,3 +1,4 @@
 import { useLocalStorage } from 'usehooks-ts';
+import { TDictionaries } from './types';
 
-export const useLSDictionaries = () => useLocalStorage<any>('dictionaries', null);
+export const useLSDictionaries = () => useLocalStorage<TDictionaries | null>('dictionaries', null);

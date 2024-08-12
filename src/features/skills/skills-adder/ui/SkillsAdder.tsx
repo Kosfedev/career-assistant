@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { TextField } from '@mui/material';
 import { SkillBadge, THHSuggestedSkill, TSkill, useGetHHSuggestedSkills, useSkillsLS } from '@/entities/skills';
 import { Button } from '@/shared/ui';
@@ -23,7 +23,7 @@ export const SkillsAdder = () => {
     setCustomSkill(e.currentTarget.value);
   };
 
-  const getSkillsSuggestions = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const getSkillsSuggestions = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStagedForSaveHHSkills([]);
     refetch();
@@ -46,7 +46,7 @@ export const SkillsAdder = () => {
     setStagedForSaveHHSkills([]);
   };
 
-  const saveCustomSkill = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const saveCustomSkill = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newSkill: TSkill = { text: customSkill };
 

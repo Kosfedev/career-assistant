@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useAppNavigation } from '@/shared/lib';
+import { TVacanciesFiltersInitialValues } from './types';
 
-export const useFiltersInitialValues = () => {
+export const useFiltersInitialValues = (): TVacanciesFiltersInitialValues => {
   const { searchParamsObj } = useAppNavigation();
 
   const {

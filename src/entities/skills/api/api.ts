@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { BACKEND_BASE_URL } from '@/shared/config';
-import { THHSuggestedSkillsResponse } from '@/entities/skills/model/types';
+import { THHSuggestedSkillsResponse } from '../model/types';
 
 export const useGetHHSuggestedSkills = (skill: string) => {
   // TODO: разрулить типы более красиво
@@ -8,5 +8,5 @@ export const useGetHHSuggestedSkills = (skill: string) => {
     queryKey: ['get-skill-set-suggests', skill],
     queryFn: () => fetch(`${BACKEND_BASE_URL}/suggests/skill_set?text=${skill}`).then(res => res.json()),
     enabled: false,
-  } as THHSuggestedSkillsResponse);
+  } as UseQueryOptions<THHSuggestedSkillsResponse>);
 };

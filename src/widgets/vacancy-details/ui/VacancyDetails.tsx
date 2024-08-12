@@ -7,7 +7,7 @@ import { PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select } from '@mui/material';
-import { useVacanciesOverviewLS, TVacancyOverviewExtended } from '@/entities/vacancies';
+import { useVacanciesOverviewLS, TVacancyOverviewExtended, TVacancyStatus } from '@/entities/vacancies';
 
 const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => {
   const [dictionaries] = useLSDictionaries();
@@ -53,7 +53,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
         {name}
       </PageHeader>
       <Select value={vacancyOverview?.status ?? 0} onChange={(e) => {
-        saveVacancyLS(vacancyOverview, e.target.value);
+        saveVacancyLS(vacancyOverview, +e.target.value as TVacancyStatus);
       }}>
         <MenuItem value={0}>0</MenuItem>
         <MenuItem value={1}>1</MenuItem>
