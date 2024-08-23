@@ -6,7 +6,7 @@ import { useLSDictionaries } from '@/entities/dictionaries';
 import { PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
 import classNames from 'classnames';
-import { MenuItem, Select } from '@mui/material';
+import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {
   EVacancyStatuses,
   useVacanciesLS,
@@ -42,21 +42,21 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
   }, [name, skillsLS]);
 };
 
-const StatusSelect: React.FC<{ vacancy?: TVacancyDetails }> = ({ vacancy }) => {
+const StatusSelect: React.FC<{ vacancy: TVacancyDetails }> = ({ vacancy }) => {
   const { vacanciesLS, saveVacancyLS, deleteVacancyLS } = useVacanciesLS();
-  const vacancyOverview = vacanciesLS[vacancy?.id];
+  const vacancyOverview = vacanciesLS[vacancy.id];
 
   const options = useMemo(() => {
     const keys = Object.keys(EVacancyStatuses).filter((key) => isNaN(+key));
 
     return keys.map((key) => {
-      return <MenuItem key={key} value={EVacancyStatuses[key]}>
+      return <MenuItem key={key} value={EVacancyStatuses[key as keyof typeof EVacancyStatuses]}>
         {VACANCY_STATUS_NAMES.get(key)}
       </MenuItem>;
     });
   }, []);
 
-  const handleStatusChange = useCallback((e) => {
+  const handleStatusChange = useCallback((e: SelectChangeEvent<EVacancyStatuses>) => {
     const newStatus = Number(e.target.value);
     const isSetDefault = newStatus === EVacancyStatuses.Default;
 
@@ -77,9 +77,14 @@ const StatusSelect: React.FC<{ vacancy?: TVacancyDetails }> = ({ vacancy }) => {
 };
 
 export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
-  const { data: vacancy = {} as TVacancyDetails } = useGetHHVacancyById(vacancyId);
-  const { name, description = '', experience, salary, key_skills, schedule } = vacancy;
+  const { data: vacancy } = useGetHHVacancyById(vacancyId);
   const { skillsLS } = useSkillsLS();
+
+  if (!vacancy) {
+    return null;
+  }
+
+  const { name, description = '', experience, salary, key_skills, schedule } = vacancy;
   const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
 

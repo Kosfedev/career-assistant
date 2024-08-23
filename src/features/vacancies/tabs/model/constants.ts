@@ -1,3 +1,4 @@
+// TODO: capitalize
 export enum EVacanciesTabs {
   'all',
   'filtering',

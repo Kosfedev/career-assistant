@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 const columnHelper = createColumnHelper<TVacancyOverview | TVacancyStored>();
 
-export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => {
+export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStored>['columns'] => {
   const [dictionaries] = useLSDictionaries();
   const { vacanciesLS, saveVacancyLS } = useVacanciesLS();
 
