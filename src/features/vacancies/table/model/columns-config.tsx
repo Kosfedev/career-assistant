@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
-import { TVacancyOverview, useVacanciesLS } from '@/entities/vacancies';
+import { EVacancyStatuses, TVacancyOverview, TVacancyStored, useVacanciesLS } from '@/entities/vacancies';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import Link from 'next/link';
 
-const columnHelper = createColumnHelper<TVacancyOverview>();
+const columnHelper = createColumnHelper<TVacancyOverview | TVacancyStored>();
 
 export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => {
   const [dictionaries] = useLSDictionaries();
-  const { saveVacancyLS } = useVacanciesLS();
+  const { vacanciesLS, saveVacancyLS } = useVacanciesLS();
 
   return useMemo(() => [
     {
@@ -58,17 +58,32 @@ export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => 
     },
     columnHelper.display({
       id: 'actions',
-      cell: ({ row }) => (
-        <>
-          <button onClick={() => {
-            {/* TODO: add enum or const */
+      cell: ({ row }) => {
+        const vacancy = row.original;
+        const storedVacancy = vacanciesLS[vacancy.id];
+
+        return (
+          <div className={'flex justify-end'}>
+            {
+              !storedVacancy && (
+                // TODO: переделать на компонент
+                <button className={'text-primary-500 hover:text-primary-400 active:text-primary-400'} onClick={() => {
+                  saveVacancyLS(vacancy, EVacancyStatuses.Selection);
+                }}>
+                  Сохранить
+                </button>
+              )
             }
-            saveVacancyLS(row.original, 1);
-          }}>Добавить
-          </button>
-          <Link href={`/vacancies/${row.original.id}`}>{'->'}</Link>
-        </>
-      ),
+            <Link
+              className={'[&:not(:first-child)]:ml-2 inline-flex justify-center items-center w-6 h-6 border-2 border-primary-500 hover:border-primary-400 active:border-primary-400 rounded-full text-primary-500 hover:text-primary-400 active:text-primary-400'}
+              href={`/vacancies/${row.original.id}`}
+              title={'Перейти к вакансии'}
+            >
+              {'->'}
+            </Link>
+          </div>
+        );
+      },
     }),
-  ], [dictionaries?.currency, saveVacancyLS]);
+  ], [dictionaries?.currency, saveVacancyLS, vacanciesLS]);
 };

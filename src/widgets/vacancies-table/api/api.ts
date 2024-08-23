@@ -1,5 +1,5 @@
 import { useSearchParams } from 'next/navigation';
-import { TVacanciesResponse, EVacancyStatuses, useGetHHVacancies } from '@/entities/vacancies';
+import { EVacancyStatuses, TVacanciesResponse, useGetHHVacancies } from '@/entities/vacancies';
 import { EVacanciesTabs } from '@/features/vacancies/tabs';
 import { useGetLSVacanciesByStatus } from '../model/local-storage';
 
@@ -20,7 +20,7 @@ export const useGetVacancies = () => {
   } as TVacanciesResponse;
   const storedVacanciesByStatus = useGetLSVacanciesByStatus(status);
 
-  return status === 0 ? HHVacancies : {
+  return status === EVacancyStatuses.Default ? HHVacancies : {
     page: 1,
     pages: 1,
     per_page: 999,
