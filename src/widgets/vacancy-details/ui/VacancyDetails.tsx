@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { MenuItem, Select } from '@mui/material';
 import {
   EVacancyStatuses,
-  TVacancyOverviewExtended,
   useVacanciesOverviewLS,
   VACANCY_STATUS_NAMES,
 } from '@/entities/vacancies';
@@ -43,13 +42,13 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
   }, [name, skillsLS]);
 };
 
-const StatusSelect: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
+const StatusSelect: React.FC<{ vacancy?: TVacancyDetails }> = ({ vacancy }) => {
   const { vacanciesLS, saveVacancyLS } = useVacanciesOverviewLS();
-  const vacancyOverview = vacanciesLS[vacancyId] as TVacancyOverviewExtended;
+  const vacancyOverview = vacanciesLS[vacancy?.id];
 
   const options = useMemo(() => {
     const keys = Object.keys(EVacancyStatuses).filter((key) => isNaN(+key));
-    
+
     return keys.map((key) => {
       return <MenuItem key={key} value={EVacancyStatuses[key]}>
         {VACANCY_STATUS_NAMES.get(key)}
@@ -57,10 +56,9 @@ const StatusSelect: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
     });
   }, []);
 
-
   return (
     <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={(e) => {
-      saveVacancyLS(vacancyOverview, +e.target.value as EVacancyStatuses);
+      saveVacancyLS(vacancyOverview ?? vacancy, +e.target.value as EVacancyStatuses);
     }}>
       {options}
     </Select>
@@ -79,7 +77,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
       <PageHeader>
         {name}
       </PageHeader>
-      <StatusSelect vacancyId={vacancyId} />
+      <StatusSelect vacancy={vacancy} />
       <div>
         <p>
           {experience?.name}
