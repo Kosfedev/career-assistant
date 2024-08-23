@@ -7,7 +7,12 @@ import { PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select } from '@mui/material';
-import { useVacanciesOverviewLS, TVacancyOverviewExtended, TVacancyStatus } from '@/entities/vacancies';
+import {
+  EVacancyStatuses,
+  TVacancyOverviewExtended,
+  useVacanciesOverviewLS,
+  VACANCY_STATUS_NAMES,
+} from '@/entities/vacancies';
 
 const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => {
   const [dictionaries] = useLSDictionaries();
@@ -38,31 +43,43 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
   }, [name, skillsLS]);
 };
 
+const StatusSelect: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
+  const { vacanciesLS, saveVacancyLS } = useVacanciesOverviewLS();
+  const vacancyOverview = vacanciesLS[vacancyId] as TVacancyOverviewExtended;
+
+  const options = useMemo(() => {
+    const keys = Object.keys(EVacancyStatuses).filter((key) => isNaN(+key));
+    
+    return keys.map((key) => {
+      return <MenuItem key={key} value={EVacancyStatuses[key]}>
+        {VACANCY_STATUS_NAMES.get(key)}
+      </MenuItem>;
+    });
+  }, []);
+
+
+  return (
+    <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={(e) => {
+      saveVacancyLS(vacancyOverview, +e.target.value as EVacancyStatuses);
+    }}>
+      {options}
+    </Select>
+  );
+};
+
 export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
   const { data: vacancy = {} as TVacancyDetails } = useGetHHVacancyById(vacancyId);
   const { name, description = '', experience, salary, key_skills, schedule } = vacancy;
   const { skillsLS } = useSkillsLS();
   const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
-  const { vacanciesLS, saveVacancyLS } = useVacanciesOverviewLS();
-  const vacancyOverview = vacanciesLS[vacancy.id] as TVacancyOverviewExtended;
 
   return (
     <>
       <PageHeader>
         {name}
       </PageHeader>
-      <Select value={vacancyOverview?.status ?? 0} onChange={(e) => {
-        saveVacancyLS(vacancyOverview, +e.target.value as TVacancyStatus);
-      }}>
-        <MenuItem value={0}>0</MenuItem>
-        <MenuItem value={1}>1</MenuItem>
-        <MenuItem value={2}>2</MenuItem>
-        <MenuItem value={3}>3</MenuItem>
-        <MenuItem value={4}>4</MenuItem>
-        <MenuItem value={5}>5</MenuItem>
-        <MenuItem value={6}>6</MenuItem>
-      </Select>
+      <StatusSelect vacancyId={vacancyId} />
       <div>
         <p>
           {experience?.name}
