@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { EVacancyStatuses, TVacancyOverviewExtended, useVacanciesOverviewLS } from '@/entities/vacancies';
+import { EVacancyStatuses, TVacancyOverviewExtended, useVacanciesLS } from '@/entities/vacancies';
 
 export const useGetLSVacanciesByStatus = (status: EVacancyStatuses) => {
-  const { vacanciesLS } = useVacanciesOverviewLS();
+  const { vacanciesLS } = useVacanciesLS();
 
   return useMemo(() => {
     const vacanciesEntries = Object.entries(vacanciesLS);

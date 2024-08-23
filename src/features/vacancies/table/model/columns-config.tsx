@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
-import { TVacancyOverview, useVacanciesOverviewLS } from '@/entities/vacancies';
+import { TVacancyOverview, useVacanciesLS } from '@/entities/vacancies';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import Link from 'next/link';
 
@@ -9,7 +9,7 @@ const columnHelper = createColumnHelper<TVacancyOverview>();
 
 export const useTableColumns = (): TableOptions<TVacancyOverview>['columns'] => {
   const [dictionaries] = useLSDictionaries();
-  const { saveVacancyLS } = useVacanciesOverviewLS();
+  const { saveVacancyLS } = useVacanciesLS();
 
   return useMemo(() => [
     {

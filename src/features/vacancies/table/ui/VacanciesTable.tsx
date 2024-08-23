@@ -25,7 +25,6 @@ const getTableHeadRows = (headerGroups: HeaderGroup<RowData>[]) =>
     </tr>
   ));
 
-
 const getTableBodyRows = (rows: Row<RowData>[]) =>
   rows.map((row, index) =>
     <tr key={row.id} className={index % 2 === 1 ? 'bg-dark-300' : ''}>

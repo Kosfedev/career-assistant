@@ -5,10 +5,10 @@ import { EVacancyStatuses } from './constants';
 // TODO: FSD breach - same layer slices cross import
 import { TVacancyDetails } from '@/entities/vacancy';
 
-const useVacanciesOverviewLSBase = () => useLocalStorage<TVacanciesStorage>('vacancies-overview-stored', {});
+const useVacanciesLSBase = () => useLocalStorage<TVacanciesStorage>('vacancies-overview-stored', {});
 
-const useSaveVacancyOverview = () => {
-  const [vacanciesStored, setVacanciesStored] = useVacanciesOverviewLSBase();
+const useVacancyLSSave = () => {
+  const [vacanciesStored, setVacanciesStored] = useVacanciesLSBase();
 
   return useCallback((vacancy: TVacancyOverview | TVacancyDetails, status: EVacancyStatuses) => {
     const storedVacancy = vacanciesStored[vacancy.id];
@@ -24,9 +24,22 @@ const useSaveVacancyOverview = () => {
   }, [setVacanciesStored, vacanciesStored]);
 };
 
-export const useVacanciesOverviewLS = () => {
-  const [vacanciesLS] = useVacanciesOverviewLSBase();
-  const saveVacancyLS = useSaveVacancyOverview();
+const useVacancyLSDelete = () => {
+  const [vacanciesStored, setVacanciesStored] = useVacanciesLSBase();
 
-  return { vacanciesLS, saveVacancyLS };
+  return useCallback((vacancyId: number) => {
+    const newVacanciesStored = structuredClone(vacanciesStored);
+
+    delete newVacanciesStored[vacancyId];
+
+    setVacanciesStored(newVacanciesStored);
+  }, [setVacanciesStored, vacanciesStored]);
+};
+
+export const useVacanciesLS = () => {
+  const [vacanciesLS] = useVacanciesLSBase();
+  const saveVacancyLS = useVacancyLSSave();
+  const deleteVacancyLS = useVacancyLSDelete();
+
+  return { vacanciesLS, saveVacancyLS, deleteVacancyLS };
 };

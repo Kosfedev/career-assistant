@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { TVacancyDetails, useGetHHVacancyById } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { PageHeader } from '@/shared/ui';
@@ -9,7 +9,7 @@ import classNames from 'classnames';
 import { MenuItem, Select } from '@mui/material';
 import {
   EVacancyStatuses,
-  useVacanciesOverviewLS,
+  useVacanciesLS,
   VACANCY_STATUS_NAMES,
 } from '@/entities/vacancies';
 
@@ -43,7 +43,7 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
 };
 
 const StatusSelect: React.FC<{ vacancy?: TVacancyDetails }> = ({ vacancy }) => {
-  const { vacanciesLS, saveVacancyLS } = useVacanciesOverviewLS();
+  const { vacanciesLS, saveVacancyLS, deleteVacancyLS } = useVacanciesLS();
   const vacancyOverview = vacanciesLS[vacancy?.id];
 
   const options = useMemo(() => {
@@ -56,10 +56,21 @@ const StatusSelect: React.FC<{ vacancy?: TVacancyDetails }> = ({ vacancy }) => {
     });
   }, []);
 
+  const handleStatusChange = useCallback((e) => {
+    const newStatus = Number(e.target.value);
+    const isSetDefault = newStatus === EVacancyStatuses.Default;
+
+    if (isSetDefault) {
+      deleteVacancyLS(Number(vacancy.id));
+
+      return;
+    }
+
+    saveVacancyLS(vacancyOverview ?? vacancy, newStatus);
+  }, [deleteVacancyLS, saveVacancyLS, vacancy, vacancyOverview]);
+
   return (
-    <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={(e) => {
-      saveVacancyLS(vacancyOverview ?? vacancy, +e.target.value as EVacancyStatuses);
-    }}>
+    <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={handleStatusChange}>
       {options}
     </Select>
   );
