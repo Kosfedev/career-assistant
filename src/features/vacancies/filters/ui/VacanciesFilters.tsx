@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useFormik } from 'formik';
-import { Checkbox, Select, TextField, MenuItem } from '@mui/material';
+import { Checkbox, Select, TextField, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { Button } from '@/shared/ui';
@@ -41,75 +41,96 @@ export const VacanciesFilters = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex mb-4 *:ml-4 first:*:ml-0">
-      <div className="flex flex-col *:mt-2 first:*:mt-0">
+    <form onSubmit={handleSubmit} className="flex [&:not(:first-child)]:*:ml-4">
+      <div className="flex flex-col [&:not(:first-child)]:*:mt-2">
         <TextField name="text"
                    value={values.text}
                    label="Текст"
                    className="w-60"
                    onChange={handleChange}
         />
-        <Select name="search_field"
-                value={values.search_field}
-                label="Где искать"
-                className="w-60"
-                onChange={handleChange}
-        >
-          <MenuItem value="">-</MenuItem>
-          {vacancy_search_fields?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
-        </Select>
+        {/* TODO: вынести select в shared */}
+        <FormControl>
+          <InputLabel id="search-field-label">Где искать</InputLabel>
+          <Select name="search_field"
+                  value={values.search_field}
+                  label="Где искать"
+                  labelId="search-field-label"
+                  className="w-60"
+                  onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {vacancy_search_fields?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+          </Select>
+        </FormControl>
       </div>
-      <div className="flex flex-col *:mt-2 first:*:mt-0">
-        <Select name="employment"
-                value={values.employment}
-                label="Тип трудоустройства"
-                className="w-60"
-                onChange={handleChange}
-        >
-          <MenuItem value="">-</MenuItem>
-          {employment?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
-        </Select>
-        <Select
-          name="schedule"
-          value={values.schedule}
-          labelId="demo-simple-select-label"
-          label="Расписание"
-          aria-disabled={false}
-          className="w-60"
-          onChange={handleChange}
-        >
-          <MenuItem value="">-</MenuItem>
-          {schedule?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
-        </Select>
+      <div className="flex flex-col [&:not(:first-child)]:*:mt-2">
+        <FormControl>
+          <InputLabel id="employment-label">Тип трудоустройства</InputLabel>
+          <Select name="employment"
+                  value={values.employment}
+                  label="Тип трудоустройства"
+                  labelId="employment-label"
+                  className="w-60"
+                  onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {employment?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel id="schedule-label">Расписание</InputLabel>
+          <Select
+            name="schedule"
+            value={values.schedule}
+            label="Расписание"
+            labelId="schedule-label"
+            aria-disabled={false}
+            className="w-60"
+            onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {schedule?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+          </Select>
+        </FormControl>
       </div>
-      <div className="flex flex-col *:mt-2 first:*:mt-0">
-        <div className="flex items-center w-60 h-14 text-primary-500">
-          <label htmlFor="with-salary">Только с зарплатой</label>
+      <div className="flex flex-col [&:not(:first-child)]:*:mt-2">
+        <label htmlFor="with-salary" className="flex justify-between items-center h-14 pl-3 text-primary-500">
+          Только с зарплатой
           <Checkbox name="only_with_salary"
                     id="with-salary"
                     checked={values.only_with_salary}
                     onChange={() => setFieldValue('only_with_salary', !values.only_with_salary)}
           />
-        </div>
-        <Select name="experience"
-                value={values.experience}
-                label={'Опыт работы'}
-                className="w-60"
-                onChange={handleChange}
-        >
-          <MenuItem value="">-</MenuItem>
-          {experience?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
-        </Select>
+        </label>
+        <FormControl>
+          <InputLabel id="experience-label">Опыт работы</InputLabel>
+          <Select name="experience"
+                  value={values.experience}
+                  label="Опыт работы"
+                  labelId="experience-label"
+                  className="w-60"
+                  onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {experience?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+          </Select>
+        </FormControl>
       </div>
-      <div className="flex flex-col *:mt-2 first:*:mt-0">
-        <Select name="currency"
-                value={values.currency}
-                label="Валюта"
-                onChange={handleChange}
-        >
-          <MenuItem value="">-</MenuItem>
-          {currency?.map(({ code, name }) => <MenuItem key={code} value={code}>{code} {name}</MenuItem>)}
-        </Select>
+      <div className="flex flex-col [&:not(:first-child)]:*:mt-2">
+        <FormControl>
+          <InputLabel id="currency-label">Валюта</InputLabel>
+          <Select name="currency"
+                  value={values.currency}
+                  labelId="experience-label"
+                  label="Валюта"
+                  className="w-60"
+                  onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {currency?.map(({ code, name }) => <MenuItem key={code} value={code}>{code} {name}</MenuItem>)}
+          </Select>
+        </FormControl>
         <TextField name="salary"
                    value={values.salary}
                    label="Зарплата"
