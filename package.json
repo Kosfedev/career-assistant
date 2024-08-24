@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "generate": "./scripts/generate-hh-schemas.sh",
-    "build": "./scripts/generate-hh-schemas.sh && next build",
+    "generate-and-build": "./scripts/generate-hh-schemas.sh && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "generate-api-types": "openapi-typescript https://api.hh.ru/openapi/specification/public --output src/shared/schemas/hh.d.ts"
