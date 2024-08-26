@@ -14,6 +14,7 @@ export const useFiltersInitialValues = (): TVacanciesFiltersInitialValues => {
     schedule,
     search_field,
     text,
+    order_by,
   } = searchParamsObj;
 
   return useMemo(() => ({
@@ -25,11 +26,13 @@ export const useFiltersInitialValues = (): TVacanciesFiltersInitialValues => {
     currency: currency ?? '',
     salary: salary ?? '',
     only_with_salary: only_with_salary === 'true',
+    order_by: order_by ?? '',
   }), [
     currency,
     employment,
     experience,
     only_with_salary,
+    order_by,
     salary,
     schedule,
     search_field,
