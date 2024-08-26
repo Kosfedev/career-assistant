@@ -17,6 +17,15 @@ export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStore
       header: 'ID',
     },
     {
+      accessorKey: 'published_at',
+      header: 'Дата публикации',
+      cell: (props) => {
+        const publishDate = new Date(props.getValue());
+
+        return publishDate.toLocaleDateString();
+      },
+    },
+    {
       accessorKey: 'name',
       header: 'Название',
     },
@@ -40,8 +49,8 @@ export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStore
       accessorKey: 'salary.currency',
       header: 'Валюта',
       cell: (props) => {
-        // TODO: вынести в lib
         const currencyCode = props.getValue();
+        // TODO: вынести в lib
         const currencyItem = dictionaries?.currency.find(({ code }) => code === currencyCode);
 
         return currencyItem ? currencyItem.abbr : currencyCode;

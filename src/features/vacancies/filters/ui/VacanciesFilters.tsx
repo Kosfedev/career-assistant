@@ -14,7 +14,14 @@ export const VacanciesFilters = () => {
   const { pushQuery } = useAppNavigation();
 
   const [dictionaries] = useLSDictionaries();
-  const { employment, experience, schedule, currency, vacancy_search_fields } = dictionaries ?? {};
+  const {
+    employment,
+    experience,
+    schedule,
+    currency,
+    vacancy_search_fields,
+    vacancy_search_order,
+  } = dictionaries ?? {};
   const initialValues = useFiltersInitialValues();
 
   const { values, handleChange, handleSubmit, setFieldValue } = useFormik<TVacanciesFiltersInputs>({
@@ -51,10 +58,10 @@ export const VacanciesFilters = () => {
         />
         {/* TODO: вынести select в shared */}
         <FormControl>
-          <InputLabel id="search-field-label">Где искать</InputLabel>
+          <InputLabel id="search-field-label">Где искать текст</InputLabel>
           <Select name="search_field"
                   value={values.search_field}
-                  label="Где искать"
+                  label="Где искать текст"
                   labelId="search-field-label"
                   className="w-60"
                   onChange={handleChange}
@@ -122,7 +129,7 @@ export const VacanciesFilters = () => {
           <InputLabel id="currency-label">Валюта</InputLabel>
           <Select name="currency"
                   value={values.currency}
-                  labelId="experience-label"
+                  labelId="currency-label"
                   label="Валюта"
                   className="w-60"
                   onChange={handleChange}
@@ -137,9 +144,24 @@ export const VacanciesFilters = () => {
                    onChange={handleChange}
         />
       </div>
-      <Button type="submit">
-        Найти
-      </Button>
+      <div className="flex flex-col [&:not(:first-child)]:*:mt-2">
+        <FormControl>
+          <InputLabel id="sort-label">Сортировка</InputLabel>
+          <Select name="order_by"
+                  value={values.order_by}
+                  labelId="sort-label"
+                  label="Сортировка"
+                  className="w-60"
+                  onChange={handleChange}
+          >
+            <MenuItem value="">-</MenuItem>
+            {vacancy_search_order?.map(({ id, name }) => <MenuItem key={id} value={id}>{name}</MenuItem>)}
+          </Select>
+        </FormControl>
+        <Button type="submit">
+          Найти
+        </Button>
+      </div>
     </form>
   );
 };
