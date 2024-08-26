@@ -84,7 +84,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
     return null;
   }
 
-  const { name, description = '', experience, salary, key_skills, schedule } = vacancy;
+  const { name, description = '', experience, salary, key_skills, schedule, published_at } = vacancy;
   const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
 
@@ -95,6 +95,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
       </PageHeader>
       <StatusSelect vacancy={vacancy} />
       <div>
+        <p>Опубликована: {new Date(published_at).toLocaleDateString()}</p>
         <p>
           {experience?.name}
         </p>
