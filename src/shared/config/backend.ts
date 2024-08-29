@@ -1,1 +1,1 @@
-export const BACKEND_BASE_URL = 'https://api.hh.ru';
+export const HH_END_POINT = 'https://api.hh.ru';
