@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { TVacancyDetails, useGetHHVacancyById } from '@/entities/vacancy';
+import { TVacancyDetails, useGetHHVacancyById, useMutateVacancy } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
@@ -43,7 +43,9 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
 };
 
 const StatusSelect: React.FC<{ vacancy: TVacancyDetails }> = ({ vacancy }) => {
-  const { vacanciesLS, saveVacancyLS, deleteVacancyLS } = useVacanciesLS();
+  const { useUpdateVacancy } = useMutateVacancy();
+  const { mutateAsync: updateVacancy } = useUpdateVacancy();
+  const { vacanciesLS, deleteVacancyLS } = useVacanciesLS();
   const vacancyOverview = vacanciesLS[vacancy.id];
 
   const options = useMemo(() => {
@@ -66,8 +68,8 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails }> = ({ vacancy }) => {
       return;
     }
 
-    saveVacancyLS(vacancyOverview ?? vacancy, newStatus);
-  }, [deleteVacancyLS, saveVacancyLS, vacancy, vacancyOverview]);
+    updateVacancy({ vacancyId: vacancy.id, updatedFields: { status: newStatus } });
+  }, [deleteVacancyLS, updateVacancy, vacancy.id]);
 
   return (
     <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={handleStatusChange}>
