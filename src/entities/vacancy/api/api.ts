@@ -9,9 +9,19 @@ export const useGetHHVacancyById = (vacancyId: number, params: { [p: string]: st
 
   // TODO: разрулить типы более красиво
   return useQuery({
-    queryKey: ['vacancy-by-id', vacancyId, paramsString],
+    queryKey: ['hh-vacancy-by-id', vacancyId, paramsString],
     queryFn: () => fetch(`${HH_END_POINT}/vacancies/${vacancyId}?${paramsString}`).then(res => res.json()),
   } as UseQueryOptions<TVacancyDetails>);
+};
+
+export const useGetStoredVacancyById = (vacancyId: number, params: { [p: string]: string } = {}) => {
+  const paramsString = queryString.stringify(params, { skipNull: true, skipEmptyString: true });
+
+  // TODO: разрулить типы более красиво
+  return useQuery({
+    queryKey: ['vacancy-by-id', vacancyId, paramsString],
+    queryFn: () => fetch(`${BACKEND_END_POINT}/vacancy/${vacancyId}`).then(res => res.json()),
+  } as UseQueryOptions<TVacancyStored>);
 };
 
 // TODO: FSD breach with EVacancyStatuses import
@@ -39,16 +49,28 @@ const useUpdateVacancy = () => {
       vacancyId,
       updatedFields,
     }: { vacancyId: Pick<TVacancyStored, 'id'>, updatedFields: Partial<TVacancyStored> }) => {
-      console.log(vacancyId, updatedFields);
       return fetch(`${BACKEND_END_POINT}/vacancy/${vacancyId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedFields),
-      }).then(res => res.json());
+      });
     },
     // TODO: any
   } as any);
 };
 
-export const useMutateVacancy = () => ({ useSaveVacancy, useUpdateVacancy });
+// TODO: FSD breach with EVacancyStatuses import
+const useDeleteVacancy = () => {
+
+  // TODO: разрулить типы более красиво
+  return useMutation({
+    queryKey: ['vacancy-update'],
+    mutationFn: (vacancyId: Pick<TVacancyStored, 'id'>) => {
+      return fetch(`${BACKEND_END_POINT}/vacancy/${vacancyId}`, { method: 'DELETE' });
+    },
+    // TODO: any
+  } as any);
+};
+
+export const useMutateVacancy = () => ({ useSaveVacancy, useUpdateVacancy, useDeleteVacancy });
 

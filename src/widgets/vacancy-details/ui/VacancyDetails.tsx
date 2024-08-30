@@ -1,15 +1,14 @@
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { TVacancyDetails, useGetHHVacancyById, useMutateVacancy } from '@/entities/vacancy';
+import { TVacancyDetails, useGetHHVacancyById, useGetStoredVacancyById, useMutateVacancy } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {
-  EVacancyStatuses,
-  useVacanciesLS,
+  EVacancyStatuses, TVacancyStored,
   VACANCY_STATUS_NAMES,
 } from '@/entities/vacancies';
 
@@ -42,11 +41,13 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
   }, [name, skillsLS]);
 };
 
-const StatusSelect: React.FC<{ vacancy: TVacancyDetails }> = ({ vacancy }) => {
-  const { useUpdateVacancy } = useMutateVacancy();
+const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacancyStored }> = ({
+  vacancy,
+  storedVacancy,
+}) => {
+  const { useUpdateVacancy, useDeleteVacancy } = useMutateVacancy();
   const { mutateAsync: updateVacancy } = useUpdateVacancy();
-  const { vacanciesLS, deleteVacancyLS } = useVacanciesLS();
-  const vacancyOverview = vacanciesLS[vacancy.id];
+  const { mutateAsync: deleteVacancy } = useDeleteVacancy();
 
   const options = useMemo(() => {
     const keys = Object.keys(EVacancyStatuses).filter((key) => isNaN(+key));
@@ -63,30 +64,31 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails }> = ({ vacancy }) => {
     const isSetDefault = newStatus === EVacancyStatuses.Default;
 
     if (isSetDefault) {
-      deleteVacancyLS(Number(vacancy.id));
+      deleteVacancy(vacancy.id);
 
       return;
     }
 
     updateVacancy({ vacancyId: vacancy.id, updatedFields: { status: newStatus } });
-  }, [deleteVacancyLS, updateVacancy, vacancy.id]);
+  }, [deleteVacancy, updateVacancy, vacancy.id]);
 
   return (
-    <Select value={vacancyOverview?.status ?? EVacancyStatuses.Default} onChange={handleStatusChange}>
+    <Select value={storedVacancy?.status ?? EVacancyStatuses.Default} onChange={handleStatusChange}>
       {options}
     </Select>
   );
 };
 
 export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
-  const { data: vacancy } = useGetHHVacancyById(vacancyId);
+  const { data: HHVacancy } = useGetHHVacancyById(vacancyId);
+  const { data: storedVacancy } = useGetStoredVacancyById(vacancyId);
   const { skillsLS } = useSkillsLS();
 
-  if (!vacancy) {
+  if (!HHVacancy) {
     return null;
   }
 
-  const { name, description = '', experience, salary, key_skills, schedule, published_at } = vacancy;
+  const { name, description = '', experience, salary, key_skills, schedule, published_at } = HHVacancy;
   const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
 
@@ -95,7 +97,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
       <PageHeader>
         {name}
       </PageHeader>
-      <StatusSelect vacancy={vacancy} />
+      <StatusSelect vacancy={HHVacancy} storedVacancy={storedVacancy} />
       <div>
         <p>Опубликована: {new Date(published_at).toLocaleDateString()}</p>
         <p>
