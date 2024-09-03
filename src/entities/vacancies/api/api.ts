@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { UseQueryOptions, useQuery, UseMutationOptions } from '@tanstack/react-query';
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { BACKEND_END_POINT, HH_END_POINT } from '@/shared/config';
 import { TVacanciesResponse, TVacancyStored } from '../model/types';
 
@@ -22,5 +22,5 @@ export const useGetSavedVacancies = (params: { [p: string]: string | number } = 
     queryKey: ['vacancies-saved', paramsString],
     queryFn: () => fetch(`${BACKEND_END_POINT}/vacancies?${paramsString}`).then(res => res.json()),
     enabled,
-  } as UseMutationOptions<TVacancyStored[]>);
+  } as UseQueryOptions<TVacancyStored[]>);
 };

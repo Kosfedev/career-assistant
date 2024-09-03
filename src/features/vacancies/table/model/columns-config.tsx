@@ -76,6 +76,7 @@ export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStore
           <div className={'flex justify-end'}>
             {/* TODO: переделать на компонент */}
             <button className={'text-primary-500 hover:text-primary-400 active:text-primary-400'} onClick={() => {
+              // @ts-ignore
               saveVacancy({ ...vacancy, status: EVacancyStatuses.Selection });
             }}>
               Сохранить

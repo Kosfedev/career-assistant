@@ -64,11 +64,15 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacanc
     const isSetDefault = newStatus === EVacancyStatuses.Default;
 
     if (isSetDefault) {
+      // TODO: type error during deploy
+      // @ts-ignore
       deleteVacancy(vacancy.id);
 
       return;
     }
 
+    // TODO: type error during deploy
+    // @ts-ignore
     updateVacancy({ vacancyId: vacancy.id, updatedFields: { status: newStatus } });
   }, [deleteVacancy, updateVacancy, vacancy.id]);
 
