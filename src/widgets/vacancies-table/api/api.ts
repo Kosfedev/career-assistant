@@ -25,8 +25,13 @@ export const useGetVacancies = () => {
 
     getHHVacancies();
     // TODO: leave only status?
-  }, [getHHVacancies, getSavedVacancies, status]);
-  console.log(savedVacanciesData);
+  }, [
+    getHHVacancies,
+    getSavedVacancies,
+    status,
+    page,
+    tab,
+  ]);
 
   const HHVacancies = {
     ...HHVacanciesData,
