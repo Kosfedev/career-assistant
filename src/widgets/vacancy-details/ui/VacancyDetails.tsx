@@ -95,6 +95,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
   const { name, description = '', experience, salary, key_skills, schedule, published_at } = HHVacancy;
   const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
+  console.log(formatedDescription);
 
   return (
     <>
@@ -112,7 +113,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
         </p>
         <Salary salary={salary} />
       </div>
-      <div className="*:mt-2" dangerouslySetInnerHTML={{ __html: formatedDescription }} />
+      <div className="*:mt-2" dangerouslySetInnerHTML={{ __html: description }} />
       {key_skills?.length > 0 && (
         <div className="mt-6">
           <p>Ключевые навыки:</p>
