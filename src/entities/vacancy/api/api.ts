@@ -20,7 +20,7 @@ export const useGetStoredVacancyById = (vacancyId: number, params: { [p: string]
   // TODO: разрулить типы более красиво
   return useQuery({
     queryKey: ['vacancy-by-id', vacancyId, paramsString],
-    queryFn: () => fetch(`${BE_END_POINT}/vacancy/${vacancyId}`).then(res => res.json()),
+    queryFn: () => fetch(`${BE_END_POINT}/vacancies/${vacancyId}`).then(res => res.json()),
   } as UseQueryOptions<TVacancyStored>);
 };
 
@@ -30,7 +30,7 @@ const useSaveVacancy = () => {
   // TODO: разрулить типы более красиво
   return useMutation({
     queryKey: ['vacancy-save'],
-    mutationFn: (vacancy: TVacancyStored) => fetch(`${BE_END_POINT}/vacancy`, {
+    mutationFn: (vacancy: TVacancyStored) => fetch(`${BE_END_POINT}/vacancies`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(vacancy),
@@ -49,8 +49,8 @@ const useUpdateVacancy = () => {
       vacancyId,
       updatedFields,
     }: { vacancyId: Pick<TVacancyStored, 'id'>, updatedFields: Partial<TVacancyStored> }) => {
-      return fetch(`${BE_END_POINT}/vacancy/${vacancyId}`, {
-        method: 'PUT',
+      return fetch(`${BE_END_POINT}/vacancies/${vacancyId}`, {
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedFields),
       });
@@ -66,7 +66,7 @@ const useDeleteVacancy = () => {
   return useMutation({
     queryKey: ['vacancy-update'],
     mutationFn: (vacancyId: Pick<TVacancyStored, 'id'>) => {
-      return fetch(`${BE_END_POINT}/vacancy/${vacancyId}`, { method: 'DELETE' });
+      return fetch(`${BE_END_POINT}/vacancies/${vacancyId}`, { method: 'DELETE' });
     },
     // TODO: any
   } as any);
