@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:local": "NEXT_PUBLIC_LOCAL=1 next dev",
     "generate": "./scripts/generate-hh-schemas.sh",
     "generate-and-build": "./scripts/generate-hh-schemas.sh && next build",
     "build": "next build",
