@@ -64,7 +64,7 @@ const useDeleteVacancy = () => {
 
   // TODO: разрулить типы более красиво
   return useMutation({
-    queryKey: ['vacancy-update'],
+    queryKey: ['vacancy-delete'],
     mutationFn: (vacancyId: Pick<TVacancyStored, 'id'>) => {
       return fetch(`${BE_END_POINT}/vacancies/${vacancyId}`, { method: 'DELETE' });
     },

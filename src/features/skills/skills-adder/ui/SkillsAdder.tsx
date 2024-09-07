@@ -2,7 +2,13 @@
 
 import React, { FormEvent, useState } from 'react';
 import { TextField } from '@mui/material';
-import { SkillBadge, THHSuggestedSkill, TSkill, useGetHHSuggestedSkills, useSkillsLS } from '@/entities/skills';
+import {
+  SkillBadge,
+  THHSuggestedSkill,
+  TSkill,
+  useGetHHSuggestedSkills, useGetSavedSkills,
+  useMutateSkill,
+} from '@/entities/skills';
 import { Button } from '@/shared/ui';
 
 export const SkillsAdder = () => {
@@ -10,10 +16,13 @@ export const SkillsAdder = () => {
   const [customSkill, setCustomSkill] = useState('');
   const [stagedForSaveHHSkills, setStagedForSaveHHSkills] = useState<THHSuggestedSkill[]>([]);
   const { data: suggestedSkills, refetch, isFetching } = useGetHHSuggestedSkills(skillSearch);
-  const { skillsLS, saveSkillsLS } = useSkillsLS();
+  const { data: skills = [], refetch: fetchSavedSkills } = useGetSavedSkills();
+  const { useSaveSkill } = useMutateSkill();
+  const { mutateAsync: saveSkills } = useSaveSkill();
 
   // TODO: вынести магические числа
   const isSearchDisabled = isFetching || skillSearch.length < 2 || skillSearch.length > 3000;
+  const isCustomSkillExists = skills.some((skill) => skill.text.toLowerCase() === customSkill.toLowerCase());
 
   const changeSkillSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSkillSearch(e.currentTarget.value);
@@ -41,24 +50,28 @@ export const SkillsAdder = () => {
     setStagedForSaveHHSkills(stagedSkillsNew);
   };
 
-  const saveHHSkills = () => {
-    saveSkillsLS(stagedForSaveHHSkills);
+  const saveHHSkills = async () => {
+    // @ts-ignore
+    await saveSkills(stagedForSaveHHSkills as TSkill);
     setStagedForSaveHHSkills([]);
+    fetchSavedSkills();
   };
 
-  const saveCustomSkill = (e: FormEvent<HTMLFormElement>) => {
+  const saveCustomSkill = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newSkill: TSkill = { text: customSkill };
 
-    saveSkillsLS([newSkill]);
+    // @ts-ignore
+    await saveSkills([newSkill]);
     setStagedForSaveHHSkills([]);
+    fetchSavedSkills();
   };
 
   return (
     <div>
       <form onSubmit={saveCustomSkill}>
         <TextField id="skill" label="Любые навыки" onChange={changeCustomSkill} />
-        <Button className="ml-4" disabled={customSkill.length === 0}>Сохранить</Button>
+        <Button className="ml-4" disabled={customSkill.length === 0 || isCustomSkillExists}>Сохранить</Button>
       </form>
       <div className="mt-4 first:*:mt-0 *:mt-4">
         <form onSubmit={getSkillsSuggestions}>
@@ -69,7 +82,7 @@ export const SkillsAdder = () => {
           {suggestedSkills?.items.map(skillSuggestion => (
             <SkillBadge key={skillSuggestion.text}
                         skill={skillSuggestion}
-                        disabled={skillsLS.some(({ id }) => id === skillSuggestion.id)}
+                        disabled={skills.some(({ id }) => id === skillSuggestion.id)}
                         isActive={stagedForSaveHHSkills.some(({ id }) => id == skillSuggestion.id)}
                         onClick={() => toggleStagedForSaveSkill(skillSuggestion)}
             />

@@ -1,4 +1,3 @@
 export { SkillBadge } from './ui/SkillBadge';
-export { useGetHHSuggestedSkills } from './api/api';
-export { useSkillsLS } from './model/local-storage';
+export { useGetHHSuggestedSkills, useGetSavedSkills, useMutateSkill } from './api/api';
 export type { THHSuggestedSkill, TSkill, THHVacancyKeySkill } from './model/types';

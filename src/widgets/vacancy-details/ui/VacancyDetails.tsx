@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import { TVacancyDetails, useGetHHVacancyById, useGetStoredVacancyById, useMutateVacancy } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { PageHeader } from '@/shared/ui';
-import { THHVacancyKeySkill, useSkillsLS } from '@/entities/skills';
+import { THHVacancyKeySkill, useGetSavedSkills } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {
@@ -28,17 +28,17 @@ const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => 
 };
 
 const KeySkill = ({ name }: THHVacancyKeySkill) => {
-  const { skillsLS } = useSkillsLS();
+  const { data: skills = [] } = useGetSavedSkills();
 
   return useMemo(() => {
-    const isSkillPresent = skillsLS.some(({ text }) => text.toLowerCase() === name?.toLowerCase());
+    const isSkillPresent = skills.some(({ text }) => text.toLowerCase() === name?.toLowerCase());
 
     return (
       <li className={classNames('mt-1', { 'text-green-300': isSkillPresent })}>
         {name}
       </li>
     );
-  }, [name, skillsLS]);
+  }, [name, skills]);
 };
 
 const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacancyStored }> = ({
@@ -86,14 +86,14 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacanc
 export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
   const { data: HHVacancy } = useGetHHVacancyById(vacancyId);
   const { data: storedVacancy } = useGetStoredVacancyById(vacancyId);
-  const { skillsLS } = useSkillsLS();
+  const { data: skills = [] } = useGetSavedSkills();
 
   if (!HHVacancy) {
     return null;
   }
 
   const { name, description = '', experience, salary, key_skills, schedule, published_at } = HHVacancy;
-  const skillsReg = new RegExp(`(${skillsLS.map(({ text }) => text).join('|')})`, 'g');
+  const skillsReg = new RegExp(`(${skills.map(({ text }) => text).join('|')})`, 'g');
   const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
 
   return (
