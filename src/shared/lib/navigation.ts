@@ -18,5 +18,5 @@ export const useAppNavigation = () => {
   }, [searchParams]);
 
 
-  return { searchParamsObj, pushQuery };
+  return { searchParamsObj, searchParams, pushQuery };
 };

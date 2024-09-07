@@ -1,15 +1,14 @@
-import { useSearchParams } from 'next/navigation';
 import { EVacancyStatuses, TVacanciesResponse, useGetHHVacancies, useGetSavedVacancies } from '@/entities/vacancies';
 import { EVacanciesTabs } from '@/features/vacancies/tabs';
 import { useEffect } from 'react';
+import { useAppNavigation } from '@/shared/lib';
 
 export const useGetVacancies = () => {
-  const searchParams = useSearchParams();
-  const params = Object.fromEntries(searchParams.entries());
-  const { page, tab, ...relevantParams } = params;
+  const { searchParams, searchParamsObj } = useAppNavigation();
+  const { page, tab, ...relevantParams } = searchParamsObj;
   // HH считает страницы от 0
-  const fixedParams = { ...relevantParams, page: params.page ? +params.page - 1 : 0 };
-  const status = (EVacanciesTabs[params.tab as keyof typeof EVacanciesTabs] ?? EVacancyStatuses.Default) as unknown as EVacancyStatuses;
+  const fixedParams = { ...relevantParams, page: page ? +page - 1 : 0 };
+  const status = (EVacanciesTabs[tab as keyof typeof EVacanciesTabs] ?? EVacancyStatuses.Default) as unknown as EVacancyStatuses;
 
   const { data: savedVacanciesData = [], refetch: getSavedVacancies } = useGetSavedVacancies({ status }, false);
   const {
@@ -25,13 +24,7 @@ export const useGetVacancies = () => {
 
     getHHVacancies();
     // TODO: leave only status?
-  }, [
-    getHHVacancies,
-    getSavedVacancies,
-    status,
-    page,
-    tab,
-  ]);
+  }, [getHHVacancies, getSavedVacancies, status, searchParams]);
 
   const HHVacancies = {
     ...HHVacanciesData,
