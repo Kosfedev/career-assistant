@@ -41,11 +41,13 @@ const KeySkill = ({ name }: THHVacancyKeySkill) => {
   }, [name, skills]);
 };
 
-const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacancyStored }> = ({
+const StatusSelect: React.FC<{ vacancy: TVacancyDetails, vacancyId: number }> = ({
   vacancy,
-  storedVacancy,
+  vacancyId,
 }) => {
-  const { useUpdateVacancy, useDeleteVacancy } = useMutateVacancy();
+  const { data: storedVacancy, refetch: fetchStoredVacancy } = useGetStoredVacancyById(vacancyId);
+  const { useSaveVacancy, useUpdateVacancy, useDeleteVacancy } = useMutateVacancy();
+  const { mutateAsync: saveVacancy } = useSaveVacancy();
   const { mutateAsync: updateVacancy } = useUpdateVacancy();
   const { mutateAsync: deleteVacancy } = useDeleteVacancy();
 
@@ -59,22 +61,36 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacanc
     });
   }, []);
 
-  const handleStatusChange = useCallback((e: SelectChangeEvent<EVacancyStatuses>) => {
+  const handleStatusChange = useCallback(async (e: SelectChangeEvent<EVacancyStatuses>) => {
     const newStatus = Number(e.target.value);
     const isSetDefault = newStatus === EVacancyStatuses.Default;
 
-    if (isSetDefault) {
-      // TODO: type error during deploy
-      // @ts-ignore
-      deleteVacancy(vacancy.id);
-
-      return;
+    switch (true) {
+      case !storedVacancy:
+        // TODO: type error during deploy
+        // @ts-ignore
+        await saveVacancy({ ...vacancy, status: newStatus });
+        break;
+      case isSetDefault:
+        // TODO: type error during deploy
+        // @ts-ignore
+        await deleteVacancy(vacancy.id);
+        break;
+      default:
+        // TODO: type error during deploy
+        // @ts-ignore
+        await updateVacancy({ vacancyId: vacancy.id, updatedFields: { status: newStatus } });
     }
 
-    // TODO: type error during deploy
-    // @ts-ignore
-    updateVacancy({ vacancyId: vacancy.id, updatedFields: { status: newStatus } });
-  }, [deleteVacancy, updateVacancy, vacancy.id]);
+    fetchStoredVacancy();
+  }, [
+    deleteVacancy,
+    fetchStoredVacancy,
+    saveVacancy,
+    storedVacancy,
+    updateVacancy,
+    vacancy,
+  ]);
 
   return (
     <Select value={storedVacancy?.status ?? EVacancyStatuses.Default} onChange={handleStatusChange}>
@@ -85,7 +101,6 @@ const StatusSelect: React.FC<{ vacancy: TVacancyDetails, storedVacancy?: TVacanc
 
 export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) => {
   const { data: HHVacancy } = useGetHHVacancyById(vacancyId);
-  const { data: storedVacancy } = useGetStoredVacancyById(vacancyId);
   const { data: skills = [] } = useGetSavedSkills();
 
   if (!HHVacancy) {
@@ -101,7 +116,7 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
       <PageHeader>
         {name}
       </PageHeader>
-      <StatusSelect vacancy={HHVacancy} storedVacancy={storedVacancy} />
+      <StatusSelect vacancy={HHVacancy} vacancyId={vacancyId} />
       <div>
         <p>Опубликована: {new Date(published_at).toLocaleDateString()}</p>
         <p>
