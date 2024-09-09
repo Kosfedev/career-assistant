@@ -20,7 +20,15 @@ export const useGetStoredVacancyById = (vacancyId: number, params: { [p: string]
   // TODO: разрулить типы более красиво
   return useQuery({
     queryKey: ['vacancy-by-id', vacancyId, paramsString],
-    queryFn: () => fetch(`${BE_END_POINT}/vacancies/${vacancyId}`).then(res => res.json()),
+    queryFn: () => fetch(`${BE_END_POINT}/vacancies/${vacancyId}`)
+      .then(res => {
+        // TODO: fix whole catching process
+        if (res.status !== 200) {
+          return null;
+        }
+
+        return res.json();
+      }),
   } as UseQueryOptions<TVacancyStored>);
 };
 
