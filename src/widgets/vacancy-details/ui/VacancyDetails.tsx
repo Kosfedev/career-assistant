@@ -8,7 +8,7 @@ import { THHVacancyKeySkill, useGetSavedSkills } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import {
-  EVacancyStatuses, TVacancyStored,
+  EVacancyStatuses,
   VACANCY_STATUS_NAMES,
 } from '@/entities/vacancies';
 
