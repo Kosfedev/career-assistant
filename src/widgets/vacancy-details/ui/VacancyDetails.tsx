@@ -1,16 +1,13 @@
 'use client';
 
 import React, { useCallback, useMemo } from 'react';
-import { TVacancyDetails, useGetHHVacancyById, useGetStoredVacancyById, useMutateVacancy } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
 import { Link, PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useGetSavedSkills } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import {
-  EVacancyStatuses,
-  VACANCY_STATUS_NAMES,
-} from '@/entities/vacancies';
+import { EVacancyStatuses, TVacancyDetails, useMutateVacancy, VACANCY_STATUS_NAMES } from '@/entities/vacancies';
+import { useGetHHVacancyById, useGetStoredVacancyById } from '@/entities/vacancies/api/api';
 
 const Salary: React.FC<{ salary: TVacancyDetails['salary'] }> = ({ salary }) => {
   const [dictionaries] = useLSDictionaries();
