@@ -3,7 +3,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { TVacancyDetails, useGetHHVacancyById, useGetStoredVacancyById, useMutateVacancy } from '@/entities/vacancy';
 import { useLSDictionaries } from '@/entities/dictionaries';
-import { PageHeader } from '@/shared/ui';
+import { Link, PageHeader } from '@/shared/ui';
 import { THHVacancyKeySkill, useGetSavedSkills } from '@/entities/skills';
 import classNames from 'classnames';
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
@@ -107,14 +107,16 @@ export const VacancyDetails: React.FC<{ vacancyId: number }> = ({ vacancyId }) =
     return null;
   }
 
-  const { name, description = '', experience, salary, key_skills, schedule, published_at } = HHVacancy;
-  const skillsReg = new RegExp(`(${skills.map(({ text }) => text).join('|')})`, 'g');
-  const formatedDescription = description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>');
+  const { name, description = '', experience, salary, key_skills, schedule, published_at, alternate_url } = HHVacancy;
+  const skillsReg = new RegExp(`(${skills.map(({ text }) => text).join('|')})`, 'ig');
+  const formatedDescription = skills.length > 0 ? description.replaceAll(skillsReg, '<span class="text-green-500">$1</span>') : description;
 
   return (
     <>
       <PageHeader>
-        {name}
+        <Link href={alternate_url} target={'_blank'}>
+          {name}
+        </Link>
       </PageHeader>
       <StatusSelect vacancy={HHVacancy} vacancyId={vacancyId} />
       <div>
