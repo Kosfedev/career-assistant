@@ -1,0 +1,1 @@
+export { HH_TEXT_SEARCH_LIMITS } from './head-hunter.constants';

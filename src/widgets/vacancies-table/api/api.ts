@@ -23,7 +23,6 @@ export const useGetVacancies = () => {
     }
 
     getHHVacancies();
-    // TODO: leave only status?
   }, [getHHVacancies, getSavedVacancies, status, searchParams]);
 
   const HHVacancies = {

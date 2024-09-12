@@ -1,1 +1,3 @@
-export type TTabName = 'all' | 'filtering' | 'high' | 'medium' | 'low' | 'offers' | 'archive';
+import { EVacanciesTabs } from './constants';
+
+export type TTabName = keyof typeof EVacanciesTabs;

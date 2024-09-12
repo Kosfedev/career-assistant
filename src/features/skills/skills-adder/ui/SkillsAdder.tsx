@@ -10,6 +10,7 @@ import {
   useMutateSkill,
 } from '@/entities/skills';
 import { Button } from '@/shared/ui';
+import { HH_TEXT_SEARCH_LIMITS } from '@/shared/model';
 
 export const SkillsAdder = () => {
   const [skillSearch, setSkillSearch] = useState('');
@@ -20,8 +21,7 @@ export const SkillsAdder = () => {
   const { useSaveSkill } = useMutateSkill();
   const { mutateAsync: saveSkills } = useSaveSkill();
 
-  // TODO: вынести магические числа
-  const isSearchDisabled = isFetching || skillSearch.length < 2 || skillSearch.length > 3000;
+  const isSearchDisabled = isFetching || skillSearch.length < HH_TEXT_SEARCH_LIMITS.MIN || skillSearch.length > HH_TEXT_SEARCH_LIMITS.MAX;
   const isCustomSkillExists = skills.some((skill) => skill.text.toLowerCase() === customSkill.toLowerCase());
 
   const changeSkillSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
