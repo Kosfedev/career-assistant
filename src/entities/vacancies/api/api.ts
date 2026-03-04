@@ -9,7 +9,8 @@ export const useGetHHVacancies = (params: { [p: string]: string | number } = {},
   // TODO: разрулить типы более красиво
   return useQuery({
     queryKey: ['vacancies-overview', paramsString],
-    queryFn: () => fetch(`${HH_END_POINT}/vacancies?${paramsString}`).then(res => res.json()),
+    // TODO: убрать &per_page=100
+    queryFn: () => fetch(`${HH_END_POINT}/vacancies?${paramsString}&per_page=100`).then(res => res.json()),
     enabled,
   } as UseQueryOptions<TVacanciesResponse>);
 };
