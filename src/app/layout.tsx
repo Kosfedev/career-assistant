@@ -25,6 +25,7 @@ export default function RootLayout({ children }: Readonly<{
           <li><Link href="/">Вакансии</Link></li>
           {/* TODO: исправить подсказку */}
           <li className="mt-2"><Link href="/skills">Навыки</Link></li>
+          <li><Link href="/employers-selected">Работодатели из вакансий</Link></li>
         </ul>
       </aside>
       <main className="grow flex flex-col px-8">

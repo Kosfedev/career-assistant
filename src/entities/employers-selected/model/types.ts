@@ -1,0 +1,1 @@
+export type TEmployerSelected = { id:number, name:string, count: number };
