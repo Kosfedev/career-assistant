@@ -39,15 +39,15 @@ export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStore
       header: 'Режим работы',
     },
     {
-      accessorKey: 'salary.from',
+      accessorFn: (originalRow) => originalRow.salary?.from,
       header: 'От',
     },
     {
-      accessorKey: 'salary.to',
+      accessorFn: (originalRow) => originalRow.salary?.to,
       header: 'До',
     },
     {
-      accessorKey: 'salary.currency',
+      accessorFn: (originalRow) => originalRow.salary?.currency,
       header: 'Валюта',
       cell: (props) => {
         const currencyCode = props.getValue();
@@ -58,7 +58,7 @@ export const useTableColumns = (): TableOptions<TVacancyOverview | TVacancyStore
       },
     },
     {
-      accessorKey: 'salary.gross',
+      accessorFn: (originalRow) => originalRow.salary?.gross,
       header: 'Налоги',
       cell: (props) => {
         const isGross = props.getValue();
