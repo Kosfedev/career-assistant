@@ -18,7 +18,7 @@ export const useTableColumns = (): TableOptions<TEmployerSelected>['columns'] =>
       return;
     }
 
-    const industriesMainIds = data.industries.map(({ id })=>id[0]);
+    const industriesMainIds = data.industries.map(({ id })=>id.replaceAll(/(\d+)\..+/gm, '$1'));
     const industriesMain = savedIndustries ? savedIndustries.filter(({ id })=>industriesMainIds.includes(id)).map(({ id, name })=>({ id, name }))   : [];
 
     const employer = { ...employersSelected.get(data.id), industries: data.industries, industriesMain: industriesMain };
