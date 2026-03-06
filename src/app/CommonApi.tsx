@@ -3,16 +3,25 @@
 import { useEffect } from 'react';
 
 import { useGetDictionaries, useLSDictionaries } from '@/entities/dictionaries';
+import { useGetIndustries, useLSIndustries } from '@/entities/industries';
 
 export function CommonApi() {
   const [savedDictionaries, setSavedDictionaries] = useLSDictionaries();
-  const { data: newDictionaries, isFetched } = useGetDictionaries({ enabled: !savedDictionaries });
+  const [savedIndustries, setSavedIndustries] = useLSIndustries();
+  const { data: newDictionaries, isFetched: isDictionariesFetched } = useGetDictionaries({ enabled: !savedDictionaries });
+  const { data: newIndustries, isFetched: isIndustriesFetched } = useGetIndustries({ enabled: !savedIndustries });
 
   useEffect(() => {
-    if (isFetched && newDictionaries) {
+    if (isDictionariesFetched && newDictionaries) {
       setSavedDictionaries(newDictionaries);
     }
-  }, [newDictionaries, isFetched, setSavedDictionaries]);
+  }, [newDictionaries, isDictionariesFetched, setSavedDictionaries]);
+
+  useEffect(() => {
+    if (isIndustriesFetched && newIndustries) {
+      setSavedIndustries(newIndustries);
+    }
+  }, [newIndustries, isIndustriesFetched, setSavedIndustries]);
 
   return null;
 }
