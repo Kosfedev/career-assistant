@@ -16,8 +16,8 @@ export function EmployersSelectedFullTable() {
             </p>
             <button onClick={getEmployersIndustries || employersSelectedSorted.length === 0} disabled={isFetching}>Подтянуть сферы</button>
           </div>
-          <ul>{industriesSorted.map(({ id, name, count }) => (<li key={id}>{name}: {count}</li>))}</ul>
-          <ul>{industriesMainSorted.map(({ id, name, count }) => (<li key={id}>{name}: {count}</li>))}</ul>
+          <ul>{industriesSorted.map(({ id, name, countEmployers, countVacancies }) => (<li key={id}>{name}: {countEmployers} {countVacancies}</li>))}</ul>
+          <ul>{industriesMainSorted.map(({ id, name, countEmployers, countVacancies }) => (<li key={id}>{name}: {countEmployers} {countVacancies}</li>))}</ul>
         </div>
         {/* TODO: type error during deploy */}
         {/* @ts-ignore */}

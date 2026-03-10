@@ -3,7 +3,7 @@ import { TIndustry, useLSEmployersSelected } from '@/entities/employers-selected
 import { useLSIndustries } from '@/entities/industries';
 import { useGetEmployerById } from '@/entities/employers/api/api';
 
-type TIndustryStat = TIndustry & { count: number };
+type TIndustryStat = TIndustry & { countEmployers: number, countVacancies: number };
 
 export const useSortedData = () => {
   const [employersIndustries, setEmployersIndustries] = useState(new Map<string, TIndustry[]>());
@@ -17,20 +17,20 @@ export const useSortedData = () => {
       const industriesMainMap = new Map<string, TIndustryStat>();
       const employers = Array.from(employersSelected).map(([,employer])=>{
         employer.industries?.forEach((industry)=>{
-          const industryStat: TIndustryStat = industriesMap.get(industry.id) ?? { ...industry, count: 0 };
-          industriesMap.set(industry.id, { ...industryStat, count: industryStat.count + 1 }  );
+          const industryStat: TIndustryStat = industriesMap.get(industry.id) ?? { ...industry, countEmployers: 0, countVacancies: 0 };
+          industriesMap.set(industry.id, { ...industryStat, countEmployers: industryStat.countEmployers + 1, countVacancies: industryStat.countVacancies + employer.count }  );
         });
         employer.industriesMain?.forEach((industry)=>{
-          const industryStat: TIndustryStat = industriesMainMap.get(industry.id) ?? { ...industry, count: 0 };
-          industriesMainMap.set(industry.id, { ...industryStat, count: industryStat.count + 1 }  );
+          const industryStat: TIndustryStat = industriesMainMap.get(industry.id) ?? { ...industry, countEmployers: 0, countVacancies: 0 };
+          industriesMainMap.set(industry.id, { ...industryStat, countEmployers: industryStat.countEmployers + 1, countVacancies: industryStat.countVacancies + employer.count }  );
         });
 
         return employer;
       });
 
       const employersSorted = employers.sort(({ count: countA }, { count: countB })=> countB - countA);
-      const industries = Array.from(industriesMap).map(([,industry])=>industry).sort(({ count: countA }, { count: countB })=> countB - countA);
-      const industriesMain = Array.from(industriesMainMap).map(([,industry])=>industry).sort(({ count: countA }, { count: countB })=> countB - countA);
+      const industries = Array.from(industriesMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
+      const industriesMain = Array.from(industriesMainMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
 
       return [employersSorted, industries, industriesMain];
     }, [employersSelected],
