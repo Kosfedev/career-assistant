@@ -26,8 +26,8 @@ export const useUpdateIndustries = () => {
         });
       });
 
-      const industriesSorted = Array.from(industriesMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
-      const industriesMainSorted = Array.from(industriesMainMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
+      const industriesSorted = Array.from(industriesMap).map(([,industry])=>industry).sort(({ countVacancies: countA }, { countVacancies: countB })=> countB - countA);
+      const industriesMainSorted = Array.from(industriesMainMap).map(([,industry])=>industry).sort(({ countVacancies: countA }, { countVacancies: countB })=> countB - countA);
 
       setIndustries(industriesSorted);
       setIndustriesMain(industriesMainSorted);

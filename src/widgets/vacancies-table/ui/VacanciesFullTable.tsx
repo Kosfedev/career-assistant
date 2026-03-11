@@ -20,6 +20,7 @@ export function VacanciesFullTable() {
   useQueryStateManager();
   const { items: vacancies, page, pages, per_page, found } = useGetVacancies();
   const [cookies] = useCookies([VACANCIES_QUERY_COOKIE_NAME]);
+  // TODO: cookie returns string not object
   const { tab = DEFAULT_TAB_NAME } = cookies[VACANCIES_QUERY_COOKIE_NAME] ?? {};
   const [savedEmployers, setSavedEmployersLS] = useLSEmployersSelected();
   // TODO: вынести в employers selected?
