@@ -1,6 +1,7 @@
 'use client';
 
 import { EmployersSelectedTable } from '@/features/employers-selected/table';
+import { EmployersFilters } from '@/features/employers-selected/filters';
 import { useSortedData } from '../model/sorted-data';
 
 export function EmployersSelectedFullTable() {
@@ -9,6 +10,7 @@ export function EmployersSelectedFullTable() {
   return (
     <section>
       <div className="mt-6 p-4 bg-dark-200 rounded-lg">
+        <EmployersFilters/>
         <div className={'flex'}>
           <div>
             <p>

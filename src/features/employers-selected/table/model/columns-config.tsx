@@ -88,5 +88,5 @@ export const useTableColumns = (): TableOptions<TEmployerSelected>['columns'] =>
         );
       },
     }),
-  ], []);
+  ], [getEmployerIndustries]);
 };

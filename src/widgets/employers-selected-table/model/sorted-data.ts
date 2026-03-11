@@ -2,19 +2,39 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TIndustry, useLSEmployersSelected } from '@/entities/employers-selected';
 import { useLSIndustriesDict } from '@/entities/industries';
 import { useGetEmployerById } from '@/entities/employers/api/api';
+import { useSearchParams } from 'next/navigation';
+import * as querystring from 'querystring';
 
 export const useSortedData = () => {
   const [employersIndustries, setEmployersIndustries] = useState(new Map<string, TIndustry[]>());
   const [industriesDict] = useLSIndustriesDict();
   const [employerIndex, setEmployerIndex] = useState(-1);
   const [employersSelected, setEmployersSelected] = useLSEmployersSelected();
+  const searchParams = useSearchParams();
+  const { id:employerIdParam, name, industryMainId } = querystring.parse(searchParams.toString());
+
   // TODO: оптимизировать?
   const employersSelectedSorted = useMemo(
     ()=> {
-      const employers = Array.from(employersSelected).map(([,employer])=> employer);
+      let employers = Array.from(employersSelected).map(([,employer])=> employer);
+
+      if (employerIdParam || name || industryMainId) {
+        employers = employers.filter((employer)=>{
+          switch (true) {
+            case employerIdParam && employer.id && !employer.id.toString().includes(employerIdParam as string):
+              return false;
+            case name && !employer.name.toLowerCase().includes((name as string).toLowerCase()):
+              return false;
+            case industryMainId && !employer.industriesMain?.some((employerIndustry)=> employerIndustry.id === industryMainId):
+              return false;
+            default:
+              return true;
+          }
+        });
+      }
 
       return employers.sort(({ count: countA }, { count: countB })=> countB - countA);
-    }, [employersSelected],
+    }, [JSON.stringify(employersSelected), employerIdParam, industryMainId, name],
   );
   const { data, refetch, isFetching } = useGetEmployerById(employersSelectedSorted.length > 0 && employerIndex >= 0 ? employersSelectedSorted[employerIndex].id : -1, false);
 
