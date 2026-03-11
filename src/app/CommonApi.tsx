@@ -3,11 +3,11 @@
 import { useEffect } from 'react';
 
 import { useGetDictionaries, useLSDictionaries } from '@/entities/dictionaries';
-import { useGetIndustries, useLSIndustries } from '@/entities/industries';
+import { useGetIndustries, useLSIndustriesDict } from '@/entities/industries';
 
 export function CommonApi() {
   const [savedDictionaries, setSavedDictionaries] = useLSDictionaries();
-  const [savedIndustries, setSavedIndustries] = useLSIndustries();
+  const [savedIndustries, setSavedIndustries] = useLSIndustriesDict();
   const { data: newDictionaries, isFetched: isDictionariesFetched } = useGetDictionaries({ enabled: !savedDictionaries });
   const { data: newIndustries, isFetched: isIndustriesFetched } = useGetIndustries({ enabled: !savedIndustries });
 

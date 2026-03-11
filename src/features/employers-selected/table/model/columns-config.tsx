@@ -3,13 +3,13 @@ import { createColumnHelper, TableOptions } from '@tanstack/react-table';
 
 import { TEmployerSelected, TIndustry, useLSEmployersSelected } from '@/entities/employers-selected';
 import { useGetEmployerById } from '@/entities/employers/api/api';
-import { useLSIndustries } from '@/entities/industries';
+import { useLSIndustriesDict } from '@/entities/industries';
 
 const columnHelper = createColumnHelper<TEmployerSelected>();
 
 export const useTableColumns = (): TableOptions<TEmployerSelected>['columns'] => {
   const [employersSelected, setEmployersSelected] = useLSEmployersSelected();
-  const [savedIndustries] = useLSIndustries();
+  const [savedIndustries] = useLSIndustriesDict();
   const [employerId, setEmployerId] = useState<number>(-1);
   const { data, refetch } = useGetEmployerById(employerId, false);
 

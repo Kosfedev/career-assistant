@@ -4,7 +4,7 @@ import { EmployersSelectedTable } from '@/features/employers-selected/table';
 import { useSortedData } from '../model/sorted-data';
 
 export function EmployersSelectedFullTable() {
-  const { employersSelectedSorted, industriesSorted, industriesMainSorted, getEmployersIndustries, isFetching } = useSortedData();
+  const { employersSelectedSorted, getEmployersIndustries, isFetching } = useSortedData();
 
   return (
     <section>
@@ -16,8 +16,6 @@ export function EmployersSelectedFullTable() {
             </p>
             <button onClick={getEmployersIndustries || employersSelectedSorted.length === 0} disabled={isFetching}>Подтянуть сферы</button>
           </div>
-          <ul>{industriesSorted.map(({ id, name, countEmployers, countVacancies }) => (<li key={id}>{name}: {countEmployers} {countVacancies}</li>))}</ul>
-          <ul>{industriesMainSorted.map(({ id, name, countEmployers, countVacancies }) => (<li key={id}>{name}: {countEmployers} {countVacancies}</li>))}</ul>
         </div>
         {/* TODO: type error during deploy */}
         {/* @ts-ignore */}

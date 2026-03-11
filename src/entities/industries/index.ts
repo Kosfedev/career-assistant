@@ -1,3 +1,3 @@
 export { useGetIndustries } from './api/api';
-export type { TIndustries } from './model/types';
-export { useLSIndustries } from './model/local-storage';
+export type { TIndustries, TIndustry, TIndustryStat } from './model/types';
+export { useLSIndustriesDict } from './model/local-storage';

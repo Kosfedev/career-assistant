@@ -1,7 +1,4 @@
-// TODO: синхронизировать с industries entity || schema?
-export type TIndustry = {
-  id: string;
-  name: string;
-};
+// TODO: нарушение fsd: entity -> entity import
+import { TIndustry } from '@/entities/industries';
 
 export type TEmployerSelected = { id:number, name:string, count: number, industries?: TIndustry[], industriesMain?: TIndustry[] };

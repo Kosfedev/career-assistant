@@ -1,49 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TIndustry, useLSEmployersSelected } from '@/entities/employers-selected';
-import { useLSIndustries } from '@/entities/industries';
+import { useLSIndustriesDict } from '@/entities/industries';
 import { useGetEmployerById } from '@/entities/employers/api/api';
-
-type TIndustryStat = TIndustry & { countEmployers: number, countVacancies: number };
 
 export const useSortedData = () => {
   const [employersIndustries, setEmployersIndustries] = useState(new Map<string, TIndustry[]>());
-  const [savedIndustries] = useLSIndustries();
+  const [industriesDict] = useLSIndustriesDict();
   const [employerIndex, setEmployerIndex] = useState(-1);
   const [employersSelected, setEmployersSelected] = useLSEmployersSelected();
   // TODO: оптимизировать?
-  const [employersSelectedSorted, industriesSorted, industriesMainSorted] = useMemo(
+  const employersSelectedSorted = useMemo(
     ()=> {
-      const industriesMap = new Map<string, TIndustryStat>();
-      const industriesMainMap = new Map<string, TIndustryStat>();
-      const employers = Array.from(employersSelected).map(([,employer])=>{
-        employer.industries?.forEach((industry)=>{
-          const industryStat: TIndustryStat = industriesMap.get(industry.id) ?? { ...industry, countEmployers: 0, countVacancies: 0 };
-          industriesMap.set(industry.id, { ...industryStat, countEmployers: industryStat.countEmployers + 1, countVacancies: industryStat.countVacancies + employer.count }  );
-        });
-        employer.industriesMain?.forEach((industry)=>{
-          const industryStat: TIndustryStat = industriesMainMap.get(industry.id) ?? { ...industry, countEmployers: 0, countVacancies: 0 };
-          industriesMainMap.set(industry.id, { ...industryStat, countEmployers: industryStat.countEmployers + 1, countVacancies: industryStat.countVacancies + employer.count }  );
-        });
+      const employers = Array.from(employersSelected).map(([,employer])=> employer);
 
-        return employer;
-      });
-
-      const employersSorted = employers.sort(({ count: countA }, { count: countB })=> countB - countA);
-      const industries = Array.from(industriesMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
-      const industriesMain = Array.from(industriesMainMap).map(([,industry])=>industry).sort(({ countEmployers: countA }, { countEmployers: countB })=> countB - countA);
-
-      return [employersSorted, industries, industriesMain];
+      return employers.sort(({ count: countA }, { count: countB })=> countB - countA);
     }, [employersSelected],
   );
   const { data, refetch, isFetching } = useGetEmployerById(employersSelectedSorted.length > 0 && employerIndex >= 0 ? employersSelectedSorted[employerIndex].id : -1, false);
 
   const updateEmployersSelected = useCallback(()=> {
     const employerIndustriesMain = new Map<string, TIndustry[]>();
+    // TODO: Array.from -> map.entries().next()
     Array.from(employersIndustries).forEach(([employerId, industries])=> {
       const employerIndustriesMainSet = new Set<string>();
       const industriesMain = industries.map(({ id })=> {
         const mainId = id.replaceAll(/(\d+)\..+/gm, '$1');
-        const industryMain = savedIndustries?.find(({ id:savedMainId })=>savedMainId === mainId);
+        const industryMain = industriesDict?.find(({ id:savedMainId })=>savedMainId === mainId);
 
         if (!industryMain || employerIndustriesMainSet.has(mainId)) {
           return;
@@ -55,16 +37,18 @@ export const useSortedData = () => {
       employerIndustriesMain.set(employerId, industriesMain);
     });
 
+    // TODO: Array.from -> map.entries().next()
     Array.from(employersIndustries).forEach(([employerId, industries])=> {
       const industriesMain = employerIndustriesMain.get(employerId);
       const employerSelected = employersSelected.get(employerId);
       if (employerSelected) {
+        // TODO: иммутабельность???
         employersSelected.set(employerId, { ...employerSelected, industries, industriesMain });
       }
     });
 
     setEmployersSelected(employersSelected);
-  }, [employersIndustries, employersSelected, savedIndustries, setEmployersSelected]);
+  }, [employersIndustries, employersSelected, industriesDict, setEmployersSelected]);
 
   const getEmployersIndustries = useCallback(( )=>{
     setEmployerIndex(employerIndex + 1);
@@ -96,5 +80,5 @@ export const useSortedData = () => {
     setEmployersIndustries((employerIndustry)=> employerIndustry.set(data.id, data.industries));
   }, [data]);
   
-  return { employersSelectedSorted, industriesSorted, industriesMainSorted, isFetching, getEmployersIndustries };
+  return { employersSelectedSorted, isFetching, getEmployersIndustries };
 };
